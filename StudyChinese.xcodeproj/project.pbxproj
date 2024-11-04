@@ -1,0 +1,574 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		B06B76EB2CD85DDA0071453E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B06B76CC2CD85DD80071453E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B06B76D32CD85DD80071453E;
+			remoteInfo = StudyChinese;
+		};
+		B06B76F52CD85DDA0071453E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B06B76CC2CD85DD80071453E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B06B76D32CD85DD80071453E;
+			remoteInfo = StudyChinese;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		B06B76D42CD85DD80071453E /* StudyChinese.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StudyChinese.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B06B76EA2CD85DDA0071453E /* StudyChineseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StudyChineseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B06B76F42CD85DDA0071453E /* StudyChineseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StudyChineseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B06B76FC2CD85DDA0071453E /* Exceptions for "StudyChinese" folder in "StudyChinese" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B06B76D32CD85DD80071453E /* StudyChinese */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		B06B76D62CD85DD80071453E /* StudyChinese */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B06B76FC2CD85DDA0071453E /* Exceptions for "StudyChinese" folder in "StudyChinese" target */,
+			);
+			path = StudyChinese;
+			sourceTree = "<group>";
+		};
+		B06B76ED2CD85DDA0071453E /* StudyChineseTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = StudyChineseTests;
+			sourceTree = "<group>";
+		};
+		B06B76F72CD85DDA0071453E /* StudyChineseUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = StudyChineseUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B06B76D12CD85DD80071453E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B06B76E72CD85DDA0071453E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B06B76F12CD85DDA0071453E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B06B76CB2CD85DD80071453E = {
+			isa = PBXGroup;
+			children = (
+				B06B76D62CD85DD80071453E /* StudyChinese */,
+				B06B76ED2CD85DDA0071453E /* StudyChineseTests */,
+				B06B76F72CD85DDA0071453E /* StudyChineseUITests */,
+				B06B76D52CD85DD80071453E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B06B76D52CD85DD80071453E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B06B76D42CD85DD80071453E /* StudyChinese.app */,
+				B06B76EA2CD85DDA0071453E /* StudyChineseTests.xctest */,
+				B06B76F42CD85DDA0071453E /* StudyChineseUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B06B76D32CD85DD80071453E /* StudyChinese */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B06B76FD2CD85DDA0071453E /* Build configuration list for PBXNativeTarget "StudyChinese" */;
+			buildPhases = (
+				B06B76D02CD85DD80071453E /* Sources */,
+				B06B76D12CD85DD80071453E /* Frameworks */,
+				B06B76D22CD85DD80071453E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B06B76D62CD85DD80071453E /* StudyChinese */,
+			);
+			name = StudyChinese;
+			packageProductDependencies = (
+			);
+			productName = StudyChinese;
+			productReference = B06B76D42CD85DD80071453E /* StudyChinese.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B06B76E92CD85DDA0071453E /* StudyChineseTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B06B77022CD85DDA0071453E /* Build configuration list for PBXNativeTarget "StudyChineseTests" */;
+			buildPhases = (
+				B06B76E62CD85DDA0071453E /* Sources */,
+				B06B76E72CD85DDA0071453E /* Frameworks */,
+				B06B76E82CD85DDA0071453E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B06B76EC2CD85DDA0071453E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				B06B76ED2CD85DDA0071453E /* StudyChineseTests */,
+			);
+			name = StudyChineseTests;
+			packageProductDependencies = (
+			);
+			productName = StudyChineseTests;
+			productReference = B06B76EA2CD85DDA0071453E /* StudyChineseTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B06B76F32CD85DDA0071453E /* StudyChineseUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B06B77052CD85DDA0071453E /* Build configuration list for PBXNativeTarget "StudyChineseUITests" */;
+			buildPhases = (
+				B06B76F02CD85DDA0071453E /* Sources */,
+				B06B76F12CD85DDA0071453E /* Frameworks */,
+				B06B76F22CD85DDA0071453E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B06B76F62CD85DDA0071453E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				B06B76F72CD85DDA0071453E /* StudyChineseUITests */,
+			);
+			name = StudyChineseUITests;
+			packageProductDependencies = (
+			);
+			productName = StudyChineseUITests;
+			productReference = B06B76F42CD85DDA0071453E /* StudyChineseUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B06B76CC2CD85DD80071453E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					B06B76D32CD85DD80071453E = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					B06B76E92CD85DDA0071453E = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = B06B76D32CD85DD80071453E;
+					};
+					B06B76F32CD85DDA0071453E = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = B06B76D32CD85DD80071453E;
+					};
+				};
+			};
+			buildConfigurationList = B06B76CF2CD85DD80071453E /* Build configuration list for PBXProject "StudyChinese" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B06B76CB2CD85DD80071453E;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = B06B76D52CD85DD80071453E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B06B76D32CD85DD80071453E /* StudyChinese */,
+				B06B76E92CD85DDA0071453E /* StudyChineseTests */,
+				B06B76F32CD85DDA0071453E /* StudyChineseUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B06B76D22CD85DD80071453E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B06B76E82CD85DDA0071453E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B06B76F22CD85DDA0071453E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B06B76D02CD85DD80071453E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B06B76E62CD85DDA0071453E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B06B76F02CD85DDA0071453E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B06B76EC2CD85DDA0071453E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B06B76D32CD85DD80071453E /* StudyChinese */;
+			targetProxy = B06B76EB2CD85DDA0071453E /* PBXContainerItemProxy */;
+		};
+		B06B76F62CD85DDA0071453E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B06B76D32CD85DD80071453E /* StudyChinese */;
+			targetProxy = B06B76F52CD85DDA0071453E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		B06B76FE2CD85DDA0071453E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T29T2L39T5;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StudyChinese/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Memop.StudyChinese;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B06B76FF2CD85DDA0071453E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T29T2L39T5;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StudyChinese/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Memop.StudyChinese;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B06B77002CD85DDA0071453E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B06B77012CD85DDA0071453E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B06B77032CD85DDA0071453E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T29T2L39T5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Memop.StudyChineseTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StudyChinese.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/StudyChinese";
+			};
+			name = Debug;
+		};
+		B06B77042CD85DDA0071453E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T29T2L39T5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Memop.StudyChineseTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StudyChinese.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/StudyChinese";
+			};
+			name = Release;
+		};
+		B06B77062CD85DDA0071453E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T29T2L39T5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Memop.StudyChineseUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = StudyChinese;
+			};
+			name = Debug;
+		};
+		B06B77072CD85DDA0071453E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T29T2L39T5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Memop.StudyChineseUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = StudyChinese;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B06B76CF2CD85DD80071453E /* Build configuration list for PBXProject "StudyChinese" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B06B77002CD85DDA0071453E /* Debug */,
+				B06B77012CD85DDA0071453E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B06B76FD2CD85DDA0071453E /* Build configuration list for PBXNativeTarget "StudyChinese" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B06B76FE2CD85DDA0071453E /* Debug */,
+				B06B76FF2CD85DDA0071453E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B06B77022CD85DDA0071453E /* Build configuration list for PBXNativeTarget "StudyChineseTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B06B77032CD85DDA0071453E /* Debug */,
+				B06B77042CD85DDA0071453E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B06B77052CD85DDA0071453E /* Build configuration list for PBXNativeTarget "StudyChineseUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B06B77062CD85DDA0071453E /* Debug */,
+				B06B77072CD85DDA0071453E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B06B76CC2CD85DD80071453E /* Project object */;
+}
