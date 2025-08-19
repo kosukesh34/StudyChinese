@@ -18,9 +18,10 @@ struct ChineseWord: Identifiable, Hashable {
     let examplePronunciation: String // ExPro6
     let exampleMeaning: String // ExMean7
     let detail: String      // Detail8
+    let csvRowIndex: Int    // 実際のCSV行番号（音声ファイル対応用）
     
     // CSV行から ChineseWord を作成するイニシャライザ
-    init(csvRow: String) {
+    init(csvRow: String, csvRowIndex: Int = 0) {
         let components = csvRow.components(separatedBy: ",")
         
         // デフォルト値を設定してアクセス範囲外エラーを防ぐ
@@ -32,11 +33,12 @@ struct ChineseWord: Identifiable, Hashable {
         self.examplePronunciation = components.count > 5 ? components[5] : ""
         self.exampleMeaning = components.count > 6 ? components[6] : ""
         self.detail = components.count > 7 ? components[7] : ""
+        self.csvRowIndex = csvRowIndex
     }
     
     // 手動でデータを作成するイニシャライザ
     init(number: String, word: String, meaning: String, pronunciation: String, 
-         example: String, examplePronunciation: String, exampleMeaning: String, detail: String) {
+         example: String, examplePronunciation: String, exampleMeaning: String, detail: String, csvRowIndex: Int = 0) {
         self.number = number
         self.word = word
         self.meaning = meaning
@@ -45,6 +47,7 @@ struct ChineseWord: Identifiable, Hashable {
         self.examplePronunciation = examplePronunciation
         self.exampleMeaning = exampleMeaning
         self.detail = detail
+        self.csvRowIndex = csvRowIndex
     }
     
     // 行番号を取得（0ベース）

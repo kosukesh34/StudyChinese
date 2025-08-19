@@ -100,9 +100,9 @@ struct WordDetailView: View {
                 // 音声再生ボタン
                 HStack(spacing: 40) {
                     Button(action: {
-                        // CSVの番号をそのまま使用（AudioPlayerManagerで-1の調整済み）
-                        let csvNumber = Int(word.number) ?? 1
-                        audioPlayer.playAudio(index: csvNumber)
+                        // CSV行番号を使用して正しい音声ファイルを再生
+                        let csvRowNumber = word.csvRowIndex
+                        audioPlayer.playAudio(index: csvRowNumber)
                     }) {
                         VStack {
                             Image(systemName: "play.circle.fill")
@@ -114,9 +114,9 @@ struct WordDetailView: View {
                     }
                     
                     Button(action: {
-                        // CSVの番号をそのまま使用（AudioPlayerManagerで-1の調整済み）
-                        let csvNumber = Int(word.number) ?? 1
-                        audioPlayer.playExampleAudio(index: csvNumber)
+                        // CSV行番号を使用して正しい音声ファイルを再生
+                        let csvRowNumber = word.csvRowIndex
+                        audioPlayer.playExampleAudio(index: csvRowNumber)
                     }) {
                         VStack {
                             Image(systemName: "play.circle.fill")
@@ -149,7 +149,8 @@ struct WordDetailView: View {
         example: "他是哪国人？",
         examplePronunciation: "Tā shì nǎ guó rén?",
         exampleMeaning: "彼はどこの国の人ですか？",
-        detail: "疑問詞疑問文"
+        detail: "疑問詞疑問文",
+        csvRowIndex: 1
     )
     
     return WordDetailView(

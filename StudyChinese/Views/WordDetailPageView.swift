@@ -77,8 +77,8 @@ struct WordDetailPageView: View {
             .onAppear {
                 // 表示時に音声を自動再生
                 if let word = currentWord {
-                    let csvNumber = Int(word.number) ?? 1
-                    audioPlayer.playAudio(index: csvNumber)
+                    let csvRowNumber = word.csvRowIndex
+                    audioPlayer.playAudio(index: csvRowNumber)
                 }
             }
         }
@@ -98,8 +98,8 @@ struct WordDetailPageView: View {
                 // 音声ボタン
                 Button("音声") {
                     if let word = currentWord {
-                        let csvNumber = Int(word.number) ?? 1
-                        audioPlayer.playAudio(index: csvNumber)
+                        let csvRowNumber = word.csvRowIndex
+                        audioPlayer.playAudio(index: csvRowNumber)
                     }
                 }
             }
@@ -115,8 +115,8 @@ struct WordDetailPageView: View {
         
         // 音声を自動再生
         if let word = currentWord {
-            let csvNumber = Int(word.number) ?? 1
-            audioPlayer.playAudio(index: csvNumber)
+            let csvRowNumber = word.csvRowIndex
+            audioPlayer.playAudio(index: csvRowNumber)
         }
     }
     
@@ -129,8 +129,8 @@ struct WordDetailPageView: View {
         
         // 音声を自動再生
         if let word = currentWord {
-            let csvNumber = Int(word.number) ?? 1
-            audioPlayer.playAudio(index: csvNumber)
+            let csvRowNumber = word.csvRowIndex
+            audioPlayer.playAudio(index: csvRowNumber)
         }
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct QuizView: View {
     @ObservedObject var wordData: ChineseWordData
+    @StateObject private var studyDataManager = StudyDataManager.shared
     @State private var currentQuizWord: ChineseWord?
     @State private var options: [String] = []
     @State private var correctAnswer: String = ""
@@ -42,57 +43,66 @@ struct QuizView: View {
             
             Divider()
             
-            if let currentWord = currentQuizWord {
-                VStack(spacing: ModernDesignSystem.Spacing.lg) {
-                    // シンプルなスコア表示
-                    if totalQuestions > 0 {
-                        scoreSection
-                            .padding(.horizontal, ModernDesignSystem.Spacing.md)
-                    }
-                    
-                    // シンプルな問題表示
-                    questionSection(for: currentWord)
-                        .padding(.horizontal, ModernDesignSystem.Spacing.md)
-                    
-                    // 結果フィードバック
-                    if showAnswerFeedback {
-                        feedbackSection
-                            .padding(.horizontal, ModernDesignSystem.Spacing.md)
-                    }
-                    
-                    // シンプルな選択肢
-                    optionsSection
-                        .padding(.horizontal, ModernDesignSystem.Spacing.md)
-                    
-                    // 次の問題ボタン（回答後に表示）
-                    if selectedAnswer.isEmpty == false {
-                        SimpleButton(
-                            title: "次の問題",
-                            icon: "arrow.right.circle",
-                            style: .primary
-                        ) {
-                            nextQuestion()
+            ScrollView {
+                if let currentWord = currentQuizWord {
+                    VStack(spacing: ModernDesignSystem.Spacing.lg) {
+                        // シンプルなスコア表示
+                        if totalQuestions > 0 {
+                            scoreSection
+                                .padding(.horizontal, ModernDesignSystem.Spacing.md)
                         }
-                        .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                        
+                        // シンプルな問題表示
+                        questionSection(for: currentWord)
+                            .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                        
+                        // 結果フィードバック
+                        if showAnswerFeedback {
+                            feedbackSection
+                                .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                        }
+                        
+                        // シンプルな選択肢
+                        optionsSection
+                            .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                        
+                        // 次の問題ボタン（回答後に表示）
+                        if selectedAnswer.isEmpty == false {
+                            SimpleButton(
+                                title: "次の問題",
+                                icon: "arrow.right.circle",
+                                style: .primary
+                            ) {
+                                nextQuestion()
+                            }
+                            .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                        }
                     }
+                    .padding(.top, ModernDesignSystem.Spacing.lg)
+                    .padding(.bottom, ModernDesignSystem.Spacing.xxxl)
+                } else {
+                    startSection
+                        .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                        .padding(.top, ModernDesignSystem.Spacing.xl)
+                        .padding(.bottom, ModernDesignSystem.Spacing.xxxl)
                 }
-                .padding(.top, ModernDesignSystem.Spacing.lg)
-            } else {
-                startSection
-                    .padding(.horizontal, ModernDesignSystem.Spacing.md)
-                    .padding(.top, ModernDesignSystem.Spacing.xl)
             }
-            
-            Spacer()
         }
         .background(ModernDesignSystem.Colors.background)
         .onChange(of: currentQuizWord) { _, newWord in
-            // 問題表示時に音声を自動再生
+            // 問題表示時に音声を自動再生（クイズタイプによって音声の種類を決定）
             if let word = newWord {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    // CSVの番号をそのまま使用（AudioPlayerManagerで-1の調整済み）
-                    let csvNumber = Int(word.number) ?? 1
-                    audioPlayer.playAudio(index: csvNumber)
+                    let csvRowNumber = word.csvRowIndex
+                    
+                    switch quizType {
+                    case .wordToMeaning, .meaningToWord, .pronunciationToWord:
+                        // 単語の音声を再生
+                        audioPlayer.playAudio(index: csvRowNumber)
+                    case .exampleToMeaning:
+                        // 例文の音声を再生
+                        audioPlayer.playExampleAudio(index: csvRowNumber)
+                    }
                 }
             }
         }
@@ -160,8 +170,8 @@ struct QuizView: View {
                     .foregroundColor(ModernDesignSystem.Colors.text)
                     .multilineTextAlignment(.center)
                 
-                // 拼音（発音）を表示
-                if !word.pronunciation.isEmpty && (quizType == .wordToMeaning || quizType == .meaningToWord) {
+                // 拼音（発音）を表示（wordToMeaningとexampleToMeaningの場合のみ）
+                if !word.pronunciation.isEmpty && (quizType == .wordToMeaning || quizType == .exampleToMeaning) {
                     Text("[\(word.pronunciation)]")
                         .font(ModernDesignSystem.Typography.body)
                         .foregroundColor(ModernDesignSystem.Colors.accent)
@@ -171,9 +181,16 @@ struct QuizView: View {
             
             // 音声再生ボタン（常に表示）
             Button(action: {
-                // CSVの番号をそのまま使用（AudioPlayerManagerで-1の調整済み）
-                let csvNumber = Int(word.number) ?? 1
-                audioPlayer.playAudio(index: csvNumber)
+                let csvRowNumber = word.csvRowIndex
+                
+                switch quizType {
+                case .wordToMeaning, .meaningToWord, .pronunciationToWord:
+                    // 単語の音声を再生
+                    audioPlayer.playAudio(index: csvRowNumber)
+                case .exampleToMeaning:
+                    // 例文の音声を再生
+                    audioPlayer.playExampleAudio(index: csvRowNumber)
+                }
             }) {
                 HStack(spacing: 8) {
                     Image(systemName: "speaker.wave.2")
@@ -200,31 +217,108 @@ struct QuizView: View {
     
     // MARK: - Feedback Section
     private var feedbackSection: some View {
-        VStack(spacing: ModernDesignSystem.Spacing.sm) {
-            HStack {
-                Image(systemName: isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .font(.system(size: 20))
-                    .foregroundColor(isCorrect ? .green : .red)
-                
-                Text(isCorrect ? "正解！" : "不正解")
-                    .font(ModernDesignSystem.Typography.headline)
-                    .foregroundColor(isCorrect ? .green : .red)
-                
-                Spacer()
-            }
-            
-            if !isCorrect {
+        guard let word = currentQuizWord else { return AnyView(EmptyView()) }
+        
+        return AnyView(
+            VStack(spacing: ModernDesignSystem.Spacing.md) {
+                // 正解/不正解表示
                 HStack {
-                    Text("正解: \(correctAnswer)")
-                        .font(ModernDesignSystem.Typography.body)
-                        .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    Image(systemName: isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
+                        .font(.system(size: 20))
+                        .foregroundColor(isCorrect ? .green : .red)
+                    
+                    Text(isCorrect ? "正解！" : "不正解")
+                        .font(ModernDesignSystem.Typography.headline)
+                        .foregroundColor(isCorrect ? .green : .red)
+                    
                     Spacer()
                 }
+                
+                // 正解表示（不正解の場合）
+                if !isCorrect {
+                    HStack {
+                        Text("正解: \(correctAnswer)")
+                            .font(ModernDesignSystem.Typography.body)
+                            .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                        Spacer()
+                    }
+                }
+                
+                Divider()
+                
+                // 単語詳細情報
+                VStack(spacing: ModernDesignSystem.Spacing.sm) {
+                    // 拼音表示
+                    if !word.pronunciation.isEmpty {
+                        HStack {
+                            Text("拼音:")
+                                .font(ModernDesignSystem.Typography.body)
+                                .fontWeight(.bold)
+                                .foregroundColor(ModernDesignSystem.Colors.text)
+                            Text("[\(word.pronunciation)]")
+                                .font(ModernDesignSystem.Typography.body)
+                                .foregroundColor(ModernDesignSystem.Colors.accent)
+                            Spacer()
+                        }
+                    }
+                    
+                    // 例文表示
+                    if !word.example.isEmpty {
+                        VStack(alignment: .leading, spacing: ModernDesignSystem.Spacing.xs) {
+                            HStack {
+                                Text("例文:")
+                                    .font(ModernDesignSystem.Typography.body)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(ModernDesignSystem.Colors.text)
+                                Spacer()
+                            }
+                            
+                            Text(word.example)
+                                .font(ModernDesignSystem.Typography.body)
+                                .foregroundColor(ModernDesignSystem.Colors.text)
+                                .multilineTextAlignment(.leading)
+                            
+                            // 例文の拼音表示
+                            if !word.examplePronunciation.isEmpty {
+                                Text("[\(word.examplePronunciation)]")
+                                    .font(ModernDesignSystem.Typography.caption)
+                                    .foregroundColor(ModernDesignSystem.Colors.accent)
+                                    .multilineTextAlignment(.leading)
+                            }
+                            
+                            if !word.exampleMeaning.isEmpty {
+                                Text(word.exampleMeaning)
+                                    .font(ModernDesignSystem.Typography.caption)
+                                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                                    .multilineTextAlignment(.leading)
+                            }
+                        }
+                    }
+                    
+                    // 例文音声ボタン
+                    if !word.example.isEmpty {
+                        Button(action: {
+                            let csvRowNumber = word.csvRowIndex
+                            audioPlayer.playExampleAudio(index: csvRowNumber)
+                        }) {
+                            HStack(spacing: 8) {
+                                Image(systemName: "speaker.wave.2")
+                                Text("例文音声を再生")
+                            }
+                            .font(ModernDesignSystem.Typography.body)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, ModernDesignSystem.Spacing.sm)
+                            .background(ModernDesignSystem.Colors.accent)
+                            .cornerRadius(ModernDesignSystem.CornerRadius.sm)
+                        }
+                    }
+                }
             }
-        }
-        .padding(ModernDesignSystem.Spacing.md)
-        .background(isCorrect ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
-        .cornerRadius(ModernDesignSystem.CornerRadius.md)
+            .padding(ModernDesignSystem.Spacing.md)
+            .background(isCorrect ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
+            .cornerRadius(ModernDesignSystem.CornerRadius.md)
+        )
     }
     
     // MARK: - Options Section
@@ -378,6 +472,7 @@ struct QuizView: View {
             options = generateOptions(correct: randomWord.exampleMeaning, type: .exampleMeaning)
         }
         
+        // 正答を確実に保持してからシャッフル
         options.shuffle()
     }
     
@@ -404,13 +499,13 @@ struct QuizView: View {
     private func getQuestionText(for word: ChineseWord) -> String {
         switch quizType {
         case .meaningToWord:
-            return "この意味の中国語は？\n\n\(word.meaning)"
+            return "次の日本語の意味に対応する中国語は？\n\n\(word.meaning)"
         case .wordToMeaning:
-            return "この中国語の意味は？\n\n\(word.word)"
+            return "この中国語の意味は？（音声も確認してください）\n\n\(word.word)"
         case .pronunciationToWord:
-            return "この発音の中国語は？\n\n\(word.pronunciation)"
+            return "この拼音（発音）に対応する中国語は？\n\n\(word.pronunciation)"
         case .exampleToMeaning:
-            return "この例文の意味は？\n\n\(word.example)"
+            return "この例文の意味は？（音声も確認してください）\n\n\(word.example)"
         }
     }
     
@@ -426,6 +521,10 @@ struct QuizView: View {
         }
         
         totalQuestions += 1
+        
+        // StudyDataManagerの統計を更新
+        let quizTypeName = String(describing: quizType)
+        studyDataManager.updateQuizStats(correct: isCorrect, quizTypeName: quizTypeName)
         
         // フィードバックを表示
         withAnimation(.easeInOut(duration: 0.3)) {

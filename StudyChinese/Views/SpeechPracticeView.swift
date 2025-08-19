@@ -11,6 +11,7 @@ struct SpeechPracticeView: View {
     @ObservedObject var wordData: ChineseWordData
     @StateObject private var speechManager = SpeechRecognitionManager()
     @StateObject private var audioPlayer = AudioPlayerManager()
+    @StateObject private var studyDataManager = StudyDataManager.shared
     
     @State private var currentWord: ChineseWord?
     @State private var practiceWords: [ChineseWord] = []
@@ -556,11 +557,11 @@ struct SpeechPracticeView: View {
     }
     
     private func playModelAudio(for word: ChineseWord) {
-        let csvNumber = Int(word.number) ?? 1
+        let csvRowNumber = word.csvRowIndex
         if practiceMode == .sentences {
-            audioPlayer.playExampleAudio(index: csvNumber)
+            audioPlayer.playExampleAudio(index: csvRowNumber)
         } else {
-            audioPlayer.playAudio(index: csvNumber)
+            audioPlayer.playAudio(index: csvRowNumber)
         }
     }
     
@@ -581,6 +582,10 @@ struct SpeechPracticeView: View {
         }
         
         totalAttempts += 1
+        
+        // StudyDataManagerの統計を更新
+        studyDataManager.updateSpeechPracticeStats(accuracy: Float(result.score))
+        
         showResult = true
     }
     

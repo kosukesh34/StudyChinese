@@ -72,8 +72,18 @@ struct ContentView: View {
                         )
                     }
             }
-            .accentColor(ModernDesignSystem.Colors.accent)
-            .preferredColorScheme(.light)
+        }
+        .accentColor(ModernDesignSystem.Colors.accent)
+        .preferredColorScheme(.light)
+        .onAppear {
+            setupWidgetData()
+        }
+    }
+    
+    private func setupWidgetData() {
+        // ウィジェット用のデータを準備
+        DispatchQueue.global(qos: .background).async {
+            _ = WidgetDataManager.shared.generateTodaysQuiz(from: wordData.words)
         }
     }
 }

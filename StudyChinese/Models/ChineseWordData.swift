@@ -15,12 +15,35 @@ class ChineseWordData: ObservableObject {
     @Published var selectedIndex: Int = 0
     @Published var segmentedIndex: Int = 0
     @Published var searchText: String = ""
-    @Published var studiedWords: Set<String> = []
-    @Published var favoriteWords: Set<String> = []
+    
+    private let studyDataManager = StudyDataManager.shared
+    private var cancellables = Set<AnyCancellable>()
+    
+    // StudyDataManagerのデータを監視
+    var studiedWords: Set<String> {
+        return studyDataManager.studiedWordIds
+    }
+    
+    var favoriteWords: Set<String> {
+        return studyDataManager.favoriteWordIds
+    }
     
     init() {
         loadData()
         updateFilteredWords()
+        
+        // StudyDataManagerの変更を監視
+        studyDataManager.$studiedWordIds
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
+            
+        studyDataManager.$favoriteWordIds
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
     }
     
     // CSVファイルからデータを読み込み
@@ -31,7 +54,9 @@ class ChineseWordData: ObservableObject {
                 var dataArray = csvData.components(separatedBy: "\n")
                 dataArray.removeLast() // 最後の空行を削除
                 
-                self.words = dataArray.map { ChineseWord(csvRow: $0) }
+                self.words = dataArray.enumerated().map { (index, csvRow) in
+                    ChineseWord(csvRow: csvRow, csvRowIndex: index + 1) // CSV行番号は1から始まる
+                }
                 
                 // ランダムなインデックスを設定
                 self.selectedIndex = Int.random(in: 0..<min(394, words.count))
@@ -85,26 +110,22 @@ class ChineseWordData: ObservableObject {
     
     // 学習済みとしてマーク
     func markAsStudied(word: ChineseWord) {
-        studiedWords.insert(word.number)
+        studyDataManager.markAsStudied(word.id.uuidString)
     }
     
     // お気に入りとしてマーク
     func toggleFavorite(word: ChineseWord) {
-        if favoriteWords.contains(word.number) {
-            favoriteWords.remove(word.number)
-        } else {
-            favoriteWords.insert(word.number)
-        }
+        studyDataManager.toggleFavorite(word.id.uuidString)
     }
     
     // お気に入りかどうか確認
     func isFavorite(word: ChineseWord) -> Bool {
-        return favoriteWords.contains(word.number)
+        return studyDataManager.isFavorite(word.id.uuidString)
     }
     
     // 学習済みかどうか確認
     func isStudied(word: ChineseWord) -> Bool {
-        return studiedWords.contains(word.number)
+        return studyDataManager.isStudied(word.id.uuidString)
     }
     
     // ランダムクイズ用の単語を取得

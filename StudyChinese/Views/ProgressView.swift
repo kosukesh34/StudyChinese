@@ -9,6 +9,8 @@ import SwiftUI
 
 struct StudyProgressView: View {
     @ObservedObject var wordData: ChineseWordData
+    @StateObject private var studyDataManager = StudyDataManager.shared
+    @State private var showingNotificationSettings = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -20,6 +22,9 @@ struct StudyProgressView: View {
                     // シンプルな統計
                     statisticsSection
                     
+                    // 設定セクション
+                    settingsSection
+                    
                     // お気に入り単語
                     if !wordData.favoriteWords.isEmpty {
                         favoriteWordsSection
@@ -28,6 +33,9 @@ struct StudyProgressView: View {
                 .padding(ModernDesignSystem.Spacing.md)
             }
             .background(ModernDesignSystem.Colors.background)
+        }
+        .sheet(isPresented: $showingNotificationSettings) {
+            NotificationSettingsView()
         }
     }
     
@@ -91,6 +99,7 @@ struct StudyProgressView: View {
                 .font(ModernDesignSystem.Typography.headline)
                 .foregroundColor(ModernDesignSystem.Colors.text)
             
+            // 基本統計
             HStack(spacing: ModernDesignSystem.Spacing.md) {
                 StatItem(
                     title: "総単語数",
@@ -109,6 +118,56 @@ struct StudyProgressView: View {
                     value: "\(wordData.favoriteWords.count)",
                     icon: "heart"
                 )
+            }
+            
+            Divider()
+                .padding(.vertical, ModernDesignSystem.Spacing.sm)
+            
+            // 詳細統計
+            VStack(spacing: ModernDesignSystem.Spacing.sm) {
+                HStack {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .foregroundColor(ModernDesignSystem.Colors.accent)
+                    Text("学習ストリーク")
+                        .font(ModernDesignSystem.Typography.bodyMedium)
+                    Spacer()
+                    Text("\(studyDataManager.getStudyStreak())日")
+                        .font(ModernDesignSystem.Typography.bodyMedium)
+                        .fontWeight(.semibold)
+                }
+                
+                HStack {
+                    Image(systemName: "questionmark.diamond")
+                        .foregroundColor(ModernDesignSystem.Colors.accent)
+                    Text("クイズ正答率")
+                        .font(ModernDesignSystem.Typography.bodyMedium)
+                    Spacer()
+                    Text("\(Int(studyDataManager.quizStats.accuracy * 100))%")
+                        .font(ModernDesignSystem.Typography.bodyMedium)
+                        .fontWeight(.semibold)
+                }
+                
+                HStack {
+                    Image(systemName: "waveform.and.mic")
+                        .foregroundColor(ModernDesignSystem.Colors.accent)
+                    Text("音声練習精度")
+                        .font(ModernDesignSystem.Typography.bodyMedium)
+                    Spacer()
+                    Text("\(Int(studyDataManager.speechPracticeStats.averageAccuracy * 100))%")
+                        .font(ModernDesignSystem.Typography.bodyMedium)
+                        .fontWeight(.semibold)
+                }
+                
+                HStack {
+                    Image(systemName: "brain.head.profile")
+                        .foregroundColor(ModernDesignSystem.Colors.accent)
+                    Text("暗記カード正答率")
+                        .font(ModernDesignSystem.Typography.bodyMedium)
+                    Spacer()
+                    Text("\(Int(studyDataManager.memorizationStats.accuracy * 100))%")
+                        .font(ModernDesignSystem.Typography.bodyMedium)
+                        .fontWeight(.semibold)
+                }
             }
         }
         .padding(ModernDesignSystem.Spacing.md)
@@ -149,8 +208,87 @@ struct StudyProgressView: View {
         )
     }
     
+    // MARK: - Settings Section
+    private var settingsSection: some View {
+        VStack(alignment: .leading, spacing: ModernDesignSystem.Spacing.md) {
+            Text("設定")
+                .font(ModernDesignSystem.Typography.headline)
+                .foregroundColor(ModernDesignSystem.Colors.text)
+            
+            VStack(spacing: ModernDesignSystem.Spacing.sm) {
+                Button(action: {
+                    showingNotificationSettings = true
+                }) {
+                    HStack {
+                        Image(systemName: "bell.badge")
+                            .foregroundColor(ModernDesignSystem.Colors.accent)
+                            .frame(width: 24)
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("学習リマインダー")
+                                .font(ModernDesignSystem.Typography.bodyMedium)
+                                .foregroundColor(ModernDesignSystem.Colors.text)
+                            
+                            Text("毎日の学習習慣をサポート")
+                                .font(ModernDesignSystem.Typography.bodySmall)
+                                .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                        }
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    }
+                    .padding(ModernDesignSystem.Spacing.md)
+                    .background(Color.white)
+                    .cornerRadius(ModernDesignSystem.CornerRadius.sm)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
+                            .stroke(ModernDesignSystem.Colors.border, lineWidth: 1)
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
+                
+                // ウィジェット設定の説明
+                VStack(alignment: .leading, spacing: ModernDesignSystem.Spacing.xs) {
+                    HStack {
+                        Image(systemName: "widget.small")
+                            .foregroundColor(ModernDesignSystem.Colors.accent)
+                            .frame(width: 24)
+                        
+                        Text("ウィジェット")
+                            .font(ModernDesignSystem.Typography.bodyMedium)
+                            .foregroundColor(ModernDesignSystem.Colors.text)
+                        
+                        Spacer()
+                    }
+                    
+                    Text("ホーム画面にウィジェットを追加すると、毎日新しい中国語クイズが表示されます。ウィジェットをタップするとアプリが起動します。")
+                        .font(ModernDesignSystem.Typography.bodySmall)
+                        .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                        .padding(.leading, 32)
+                }
+                .padding(ModernDesignSystem.Spacing.md)
+                .background(ModernDesignSystem.Colors.accent.opacity(0.05))
+                .cornerRadius(ModernDesignSystem.CornerRadius.sm)
+                .overlay(
+                    RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
+                        .stroke(ModernDesignSystem.Colors.accent.opacity(0.2), lineWidth: 1)
+                )
+            }
+        }
+        .padding(ModernDesignSystem.Spacing.md)
+        .background(Color.white)
+        .cornerRadius(ModernDesignSystem.CornerRadius.md)
+        .shadow(
+            color: ModernDesignSystem.Shadow.subtle.color,
+            radius: ModernDesignSystem.Shadow.subtle.radius,
+            x: ModernDesignSystem.Shadow.subtle.x,
+            y: ModernDesignSystem.Shadow.subtle.y
+        )
+    }
 
-    
     // MARK: - Computed Properties
     private var progressPercentage: Double {
         wordData.words.count > 0 ? Double(wordData.studiedWords.count) / Double(wordData.words.count) : 0.0

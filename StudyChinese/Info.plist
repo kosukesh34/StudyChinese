@@ -6,6 +6,19 @@
 	<string>中国語の発音練習のためにマイクを使用します</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>中国語の発音練習のために音声認識機能を使用します</string>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>学習リマインダーの通知を送信するために使用します</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.studychinese.widget</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>studychinese</string>
+			</array>
+		</dict>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

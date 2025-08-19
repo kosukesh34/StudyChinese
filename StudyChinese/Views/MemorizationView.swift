@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MemorizationView: View {
     @ObservedObject var wordData: ChineseWordData
+    @StateObject private var studyDataManager = StudyDataManager.shared
     @State private var currentCardIndex: Int = 0
     @State private var showAnswer: Bool = false
     @State private var cards: [ChineseWord] = []
@@ -305,10 +306,17 @@ struct MemorizationView: View {
         let currentWord = cards[currentCardIndex]
         wordData.markAsStudied(word: currentWord)
         memorizedCount += 1
+        
+        // StudyDataManagerの統計を更新
+        studyDataManager.updateMemorizationStats(correct: true)
+        
         nextCard()
     }
     
     private func markAsNotMemorized() {
+        // StudyDataManagerの統計を更新
+        studyDataManager.updateMemorizationStats(correct: false)
+        
         nextCard()
     }
 }
@@ -339,8 +347,8 @@ struct SimpleFlashCard: View {
                         .multilineTextAlignment(.center)
                     
                     Button(action: {
-                        let csvNumber = Int(word.number) ?? 1
-                        audioPlayer.playAudio(index: csvNumber)
+                        let csvRowNumber = word.csvRowIndex
+                        audioPlayer.playAudio(index: csvRowNumber)
                     }) {
                         HStack(spacing: 8) {
                             Image(systemName: "speaker.wave.2")

@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B0CCB9AB2E54B0F80034A2DF /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0CCB9AA2E54B0F80034A2DF /* WidgetKit.framework */; };
+		B0CCB9AD2E54B0F80034A2DF /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0CCB9AC2E54B0F80034A2DF /* SwiftUI.framework */; };
+		B0CCB9BE2E54B0FA0034A2DF /* StudyChineseWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B0CCB9A82E54B0F80034A2DF /* StudyChineseWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		B06B76EB2CD85DDA0071453E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,12 +27,36 @@
 			remoteGlobalIDString = B06B76D32CD85DD80071453E;
 			remoteInfo = StudyChinese;
 		};
+		B0CCB9BC2E54B0FA0034A2DF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B06B76CC2CD85DD80071453E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B0CCB9A72E54B0F80034A2DF;
+			remoteInfo = StudyChineseWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B0CCB9C32E54B0FA0034A2DF /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				B0CCB9BE2E54B0FA0034A2DF /* StudyChineseWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		B06B76D42CD85DD80071453E /* StudyChinese.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StudyChinese.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B06B76EA2CD85DDA0071453E /* StudyChineseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StudyChineseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B06B76F42CD85DDA0071453E /* StudyChineseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StudyChineseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0CCB9A82E54B0F80034A2DF /* StudyChineseWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = StudyChineseWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0CCB9AA2E54B0F80034A2DF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		B0CCB9AC2E54B0F80034A2DF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +66,13 @@
 				Info.plist,
 			);
 			target = B06B76D32CD85DD80071453E /* StudyChinese */;
+		};
+		B0CCB9C22E54B0FA0034A2DF /* Exceptions for "StudyChineseWidget" folder in "StudyChineseWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B0CCB9A72E54B0F80034A2DF /* StudyChineseWidgetExtension */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -56,6 +93,14 @@
 		B06B76F72CD85DDA0071453E /* StudyChineseUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = StudyChineseUITests;
+			sourceTree = "<group>";
+		};
+		B0CCB9AE2E54B0F80034A2DF /* StudyChineseWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B0CCB9C22E54B0FA0034A2DF /* Exceptions for "StudyChineseWidget" folder in "StudyChineseWidgetExtension" target */,
+			);
+			path = StudyChineseWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -82,6 +127,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B0CCB9A52E54B0F80034A2DF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0CCB9AD2E54B0F80034A2DF /* SwiftUI.framework in Frameworks */,
+				B0CCB9AB2E54B0F80034A2DF /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -91,6 +145,8 @@
 				B06B76D62CD85DD80071453E /* StudyChinese */,
 				B06B76ED2CD85DDA0071453E /* StudyChineseTests */,
 				B06B76F72CD85DDA0071453E /* StudyChineseUITests */,
+				B0CCB9AE2E54B0F80034A2DF /* StudyChineseWidget */,
+				B0CCB9A92E54B0F80034A2DF /* Frameworks */,
 				B06B76D52CD85DD80071453E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -101,8 +157,18 @@
 				B06B76D42CD85DD80071453E /* StudyChinese.app */,
 				B06B76EA2CD85DDA0071453E /* StudyChineseTests.xctest */,
 				B06B76F42CD85DDA0071453E /* StudyChineseUITests.xctest */,
+				B0CCB9A82E54B0F80034A2DF /* StudyChineseWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B0CCB9A92E54B0F80034A2DF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B0CCB9AA2E54B0F80034A2DF /* WidgetKit.framework */,
+				B0CCB9AC2E54B0F80034A2DF /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -115,10 +181,12 @@
 				B06B76D02CD85DD80071453E /* Sources */,
 				B06B76D12CD85DD80071453E /* Frameworks */,
 				B06B76D22CD85DD80071453E /* Resources */,
+				B0CCB9C32E54B0FA0034A2DF /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				B0CCB9BD2E54B0FA0034A2DF /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				B06B76D62CD85DD80071453E /* StudyChinese */,
@@ -176,6 +244,28 @@
 			productReference = B06B76F42CD85DDA0071453E /* StudyChineseUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		B0CCB9A72E54B0F80034A2DF /* StudyChineseWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0CCB9BF2E54B0FA0034A2DF /* Build configuration list for PBXNativeTarget "StudyChineseWidgetExtension" */;
+			buildPhases = (
+				B0CCB9A42E54B0F80034A2DF /* Sources */,
+				B0CCB9A52E54B0F80034A2DF /* Frameworks */,
+				B0CCB9A62E54B0F80034A2DF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B0CCB9AE2E54B0F80034A2DF /* StudyChineseWidget */,
+			);
+			name = StudyChineseWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = StudyChineseWidgetExtension;
+			productReference = B0CCB9A82E54B0F80034A2DF /* StudyChineseWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -183,7 +273,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					B06B76D32CD85DD80071453E = {
@@ -196,6 +286,9 @@
 					B06B76F32CD85DDA0071453E = {
 						CreatedOnToolsVersion = 16.0;
 						TestTargetID = B06B76D32CD85DD80071453E;
+					};
+					B0CCB9A72E54B0F80034A2DF = {
+						CreatedOnToolsVersion = 16.4;
 					};
 				};
 			};
@@ -216,6 +309,7 @@
 				B06B76D32CD85DD80071453E /* StudyChinese */,
 				B06B76E92CD85DDA0071453E /* StudyChineseTests */,
 				B06B76F32CD85DDA0071453E /* StudyChineseUITests */,
+				B0CCB9A72E54B0F80034A2DF /* StudyChineseWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -236,6 +330,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B06B76F22CD85DDA0071453E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0CCB9A62E54B0F80034A2DF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -266,6 +367,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B0CCB9A42E54B0F80034A2DF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -278,6 +386,11 @@
 			isa = PBXTargetDependency;
 			target = B06B76D32CD85DD80071453E /* StudyChinese */;
 			targetProxy = B06B76F52CD85DDA0071453E /* PBXContainerItemProxy */;
+		};
+		B0CCB9BD2E54B0FA0034A2DF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B0CCB9A72E54B0F80034A2DF /* StudyChineseWidgetExtension */;
+			targetProxy = B0CCB9BC2E54B0FA0034A2DF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -529,6 +642,62 @@
 			};
 			name = Release;
 		};
+		B0CCB9C02E54B0FA0034A2DF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T29T2L39T5;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StudyChineseWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = StudyChineseWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Memop.StudyChinese.StudyChineseWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B0CCB9C12E54B0FA0034A2DF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T29T2L39T5;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StudyChineseWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = StudyChineseWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Memop.StudyChinese.StudyChineseWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -564,6 +733,15 @@
 			buildConfigurations = (
 				B06B77062CD85DDA0071453E /* Debug */,
 				B06B77072CD85DDA0071453E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0CCB9BF2E54B0FA0034A2DF /* Build configuration list for PBXNativeTarget "StudyChineseWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0CCB9C02E54B0FA0034A2DF /* Debug */,
+				B0CCB9C12E54B0FA0034A2DF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
