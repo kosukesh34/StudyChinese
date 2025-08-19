@@ -12,17 +12,6 @@ struct StudyProgressView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // シンプルなヘッダー
-            Text("学習進捗")
-                .font(ModernDesignSystem.Typography.largeTitle)
-                .fontWeight(.bold)
-                .foregroundColor(ModernDesignSystem.Colors.text)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, ModernDesignSystem.Spacing.md)
-                .background(Color.white)
-            
-            Divider()
-            
             ScrollView {
                 VStack(spacing: ModernDesignSystem.Spacing.lg) {
                     // シンプルな進捗サマリー

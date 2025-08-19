@@ -101,11 +101,6 @@ struct QuizView: View {
     // MARK: - Header Section
     private var headerSection: some View {
         HStack {
-            Text("中国語クイズ")
-                .font(ModernDesignSystem.Typography.largeTitle)
-                .fontWeight(.bold)
-                .foregroundColor(ModernDesignSystem.Colors.text)
-            
             Spacer()
             
             Picker("クイズタイプ", selection: $quizType) {

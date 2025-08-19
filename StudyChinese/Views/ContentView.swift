@@ -12,47 +12,91 @@ struct ContentView: View {
     @State private var selectedTab = 0
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            NavigationView {
-                WordListView(wordData: wordData)
-                    .navigationBarHidden(true)
+        ZStack {
+            // プレミアム背景
+            ModernDesignSystem.Gradients.subtleElevation
+                .ignoresSafeArea()
+            
+            TabView(selection: $selectedTab) {
+                NavigationView {
+                    WordListView(wordData: wordData)
+                        .navigationBarHidden(true)
+                }
+                .navigationViewStyle(StackNavigationViewStyle())
+                .tag(0)
+                .tabItem {
+                    LuxuryTabItem(
+                        icon: "list.bullet.rectangle.portrait",
+                        title: "単語リスト",
+                        isSelected: selectedTab == 0
+                    )
+                }
+                
+                QuizView(wordData: wordData)
+                    .tag(1)
+                    .tabItem {
+                        LuxuryTabItem(
+                            icon: "questionmark.diamond",
+                            title: "クイズ",
+                            isSelected: selectedTab == 1
+                        )
+                    }
+                
+                MemorizationView(wordData: wordData)
+                    .tag(2)
+                    .tabItem {
+                        LuxuryTabItem(
+                            icon: "brain.head.profile",
+                            title: "暗記",
+                            isSelected: selectedTab == 2
+                        )
+                    }
+                
+                SpeechPracticeView(wordData: wordData)
+                    .tag(3)
+                    .tabItem {
+                        LuxuryTabItem(
+                            icon: "waveform.and.mic",
+                            title: "音声練習",
+                            isSelected: selectedTab == 3
+                        )
+                    }
+                
+                StudyProgressView(wordData: wordData)
+                    .tag(4)
+                    .tabItem {
+                        LuxuryTabItem(
+                            icon: "chart.bar.xaxis",
+                            title: "学習進捗",
+                            isSelected: selectedTab == 4
+                        )
+                    }
             }
-            .navigationViewStyle(StackNavigationViewStyle())
-            .tag(0)
-            .tabItem {
-                Image(systemName: "list.bullet")
-                Text("単語リスト")
-            }
-            
-            QuizView(wordData: wordData)
-                .tag(1)
-                .tabItem {
-                    Image(systemName: "questionmark.circle")
-                    Text("クイズ")
-                }
-            
-            MemorizationView(wordData: wordData)
-                .tag(2)
-                .tabItem {
-                    Image(systemName: "brain.head.profile")
-                    Text("暗記")
-                }
-            
-            SpeechPracticeView(wordData: wordData)
-                .tag(3)
-                .tabItem {
-                    Image(systemName: "mic")
-                    Text("音声練習")
-                }
-            
-            StudyProgressView(wordData: wordData)
-                .tag(4)
-                .tabItem {
-                    Image(systemName: "chart.bar")
-                    Text("学習進捗")
-                }
+            .accentColor(ModernDesignSystem.Colors.accent)
+            .preferredColorScheme(.light)
         }
-        .accentColor(ModernDesignSystem.Colors.accent)
+    }
+}
+
+// MARK: - Luxury Tab Item
+struct LuxuryTabItem: View {
+    let icon: String
+    let title: String
+    let isSelected: Bool
+    
+    var body: some View {
+        VStack(spacing: ModernDesignSystem.Spacing.xs) {
+            Image(systemName: icon)
+                .font(.system(size: 20, weight: isSelected ? .semibold : .medium))
+                .foregroundColor(isSelected ? ModernDesignSystem.Colors.accent : ModernDesignSystem.Colors.textSecondary)
+                .scaleEffect(isSelected ? 1.1 : 1.0)
+                .animation(.easeInOut(duration: 0.2), value: isSelected)
+            
+            Text(title)
+                .font(ModernDesignSystem.Typography.labelSmall)
+                .fontWeight(isSelected ? .semibold : .medium)
+                .foregroundColor(isSelected ? ModernDesignSystem.Colors.accent : ModernDesignSystem.Colors.textSecondary)
+        }
     }
 }
 

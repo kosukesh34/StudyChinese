@@ -21,6 +21,17 @@ struct SpeechPracticeView: View {
     @State private var score = 0
     @State private var totalAttempts = 0
     @State private var showingModeSelection = false
+    @State private var practiceOrderMode: OrderMode = .number
+    
+    enum OrderMode: String, CaseIterable {
+        case number = "番号順"
+        case random = "ランダム"
+        case difficulty = "難易度順"
+        
+        var description: String {
+            return self.rawValue
+        }
+    }
     
     enum PracticeMode: String, CaseIterable {
         case words = "単語練習"
@@ -35,53 +46,88 @@ struct SpeechPracticeView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // シンプルなヘッダー
-            headerSection
-                .padding(.horizontal, ModernDesignSystem.Spacing.md)
-                .padding(.vertical, ModernDesignSystem.Spacing.md)
-                .background(Color.white)
             
-            Divider()
-            
-            if speechManager.isAuthorized {
-                if let word = currentWord {
-                    VStack(spacing: ModernDesignSystem.Spacing.lg) {
-                        // シンプルな進捗表示
-                        if totalAttempts > 0 {
-                            progressSection
-                                .padding(.horizontal, ModernDesignSystem.Spacing.md)
-                        }
+            // スクロール可能なコンテンツ
+            ScrollView {
+                VStack(spacing: ModernDesignSystem.Spacing.lg) {
+                    // モード選択
+                    HStack {
+                        Spacer()
                         
-                        // シンプルな練習コンテンツ
-                        practiceContentSection(for: word)
-                            .padding(.horizontal, ModernDesignSystem.Spacing.md)
-                        
-                        // 音声認識セクション
-                        speechRecognitionSection
-                            .padding(.horizontal, ModernDesignSystem.Spacing.md)
-                        
-                        // 認識結果表示（録音中や認識後に表示）
-                        if speechManager.isRecording || !speechManager.recognizedText.isEmpty {
-                            recognizedTextSection
-                                .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                        Button(action: {
+                            showingModeSelection = true
+                        }) {
+                            HStack(spacing: 4) {
+                                Text(practiceMode.description)
+                                    .font(ModernDesignSystem.Typography.body)
+                                Image(systemName: "chevron.down")
+                                    .font(.system(size: 12))
+                            }
+                            .foregroundColor(ModernDesignSystem.Colors.accent)
+                            .padding(.horizontal, ModernDesignSystem.Spacing.sm)
+                            .padding(.vertical, 6)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
+                                    .stroke(ModernDesignSystem.Colors.border, lineWidth: 1)
+                            )
                         }
                     }
-                    .padding(.top, ModernDesignSystem.Spacing.lg)
-                } else if practiceWords.isEmpty {
-                    emptyStateSection
-                        .padding(.horizontal, ModernDesignSystem.Spacing.md)
-                        .padding(.top, ModernDesignSystem.Spacing.xl)
-                } else {
-                    loadingSection
-                        .padding(.top, ModernDesignSystem.Spacing.xl)
-                }
-            } else {
-                authorizationSection
                     .padding(.horizontal, ModernDesignSystem.Spacing.md)
-                    .padding(.top, ModernDesignSystem.Spacing.xl)
+                    
+                    if speechManager.isAuthorized {
+                        if let word = currentWord {
+                            // 順番変更コントロール
+                            wordOrderControlSection
+                                .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                            
+                            // プレミアム進捗表示
+                            if totalAttempts > 0 {
+                                LuxuryCard(elevation: .low) {
+                                    progressSection
+                                }
+                                .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                            }
+                            
+                            // プレミアム練習コンテンツ
+                            LuxuryCard(elevation: .medium) {
+                                practiceContentSection(for: word)
+                            }
+                            .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                            
+                            // プレミアム音声認識セクション
+                            LuxuryCard(elevation: .high) {
+                                speechRecognitionSection
+                            }
+                            .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                            
+                            // 認識結果表示（録音中や認識後に表示）
+                            if speechManager.isRecording || !speechManager.recognizedText.isEmpty {
+                                LuxuryCard(elevation: .premium) {
+                                    recognizedTextSection
+                                }
+                                .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                            }
+                        } else if practiceWords.isEmpty {
+                            LuxuryCard(elevation: .medium) {
+                                emptyStateSection
+                            }
+                            .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                        } else {
+                            LuxuryCard(elevation: .low) {
+                                loadingSection
+                            }
+                            .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                        }
+                    } else {
+                        LuxuryCard(elevation: .medium) {
+                            authorizationSection
+                        }
+                        .padding(.horizontal, ModernDesignSystem.Spacing.md)
+                    }
+                }
+                .padding(.top, ModernDesignSystem.Spacing.md)
+                .padding(.bottom, ModernDesignSystem.Spacing.xxxl) // タブバーのための余白
             }
-            
-            Spacer()
         }
         .background(ModernDesignSystem.Colors.background)
         .onAppear {
@@ -286,15 +332,61 @@ struct SpeechPracticeView: View {
                     .font(ModernDesignSystem.Typography.caption)
                     .foregroundColor(ModernDesignSystem.Colors.textSecondary)
                 
-                Text(speechManager.recognizedText.isEmpty ? "音声を録音してください..." : speechManager.recognizedText)
-                    .font(ModernDesignSystem.Typography.title2)
-                    .fontWeight(.semibold)
-                    .foregroundColor(speechManager.recognizedText.isEmpty ? ModernDesignSystem.Colors.textSecondary : ModernDesignSystem.Colors.text)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity, minHeight: 60)
-                    .padding(ModernDesignSystem.Spacing.md)
-                    .background(ModernDesignSystem.Colors.lightGray)
-                    .cornerRadius(ModernDesignSystem.CornerRadius.md)
+                ZStack {
+                    // 背景
+                    RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.md)
+                        .fill(speechManager.isRecording ? 
+                              ModernDesignSystem.Colors.surface.opacity(0.8) : 
+                              ModernDesignSystem.Colors.surface)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.md)
+                                .stroke(speechManager.isRecording ? 
+                                        ModernDesignSystem.Colors.accent : 
+                                        Color.clear, lineWidth: 2)
+                        )
+                    
+                    // テキスト表示
+                    if speechManager.recognizedText.isEmpty {
+                        HStack(spacing: 8) {
+                            if speechManager.isRecording {
+                                // 録音中のアニメーション
+                                HStack(spacing: 4) {
+                                    ForEach(0..<3, id: \.self) { index in
+                                        Circle()
+                                            .fill(ModernDesignSystem.Colors.accent)
+                                            .frame(width: 8, height: 8)
+                                            .scaleEffect(speechManager.isRecording ? 1.0 : 0.5)
+                                            .animation(
+                                                Animation.easeInOut(duration: 0.6)
+                                                    .repeatForever()
+                                                    .delay(Double(index) * 0.2),
+                                                value: speechManager.isRecording
+                                            )
+                                    }
+                                }
+                                Text("音声を認識中...")
+                                    .font(ModernDesignSystem.Typography.body)
+                                    .foregroundColor(ModernDesignSystem.Colors.accent)
+                            } else {
+                                Image(systemName: "mic.slash")
+                                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                                Text("音声を録音してください...")
+                                    .font(ModernDesignSystem.Typography.body)
+                                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                            }
+                        }
+                    } else {
+                        Text(speechManager.recognizedText)
+                            .font(ModernDesignSystem.Typography.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(ModernDesignSystem.Colors.text)
+                            .multilineTextAlignment(.center)
+                            .scaleEffect(speechManager.isRecording ? 1.05 : 1.0)
+                            .animation(.easeInOut(duration: 0.3), value: speechManager.recognizedText)
+                    }
+                }
+                .frame(maxWidth: .infinity, minHeight: 80)
+                .padding(ModernDesignSystem.Spacing.md)
             }
             
             // 目標テキストとの比較表示
@@ -505,6 +597,108 @@ struct SpeechPracticeView: View {
         showResult = false
     }
     
+    // MARK: - Word Order Control Section
+    private var wordOrderControlSection: some View {
+        VStack(spacing: ModernDesignSystem.Spacing.md) {
+            // 進捗とナビゲーション
+            HStack(spacing: ModernDesignSystem.Spacing.md) {
+                // 前の単語へ
+                Button(action: { previousWord() }) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(currentIndex <= 0 ? ModernDesignSystem.Colors.textSecondary : ModernDesignSystem.Colors.accent)
+                        .frame(width: 44, height: 44)
+                        .background(Color.white)
+                        .cornerRadius(ModernDesignSystem.CornerRadius.sm)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
+                                .stroke(ModernDesignSystem.Colors.border, lineWidth: 1)
+                        )
+                }
+                .disabled(currentIndex <= 0)
+                
+                Spacer()
+                
+                // 進捗表示
+                VStack(spacing: 4) {
+                    Text("\(currentIndex + 1) / \(practiceWords.count)")
+                        .font(ModernDesignSystem.Typography.headline)
+                        .foregroundColor(ModernDesignSystem.Colors.text)
+                    
+                    ProgressView(value: Double(currentIndex + 1), total: Double(practiceWords.count))
+                        .progressViewStyle(LinearProgressViewStyle(tint: ModernDesignSystem.Colors.accent))
+                        .frame(height: 6)
+                        .frame(width: 100)
+                }
+                
+                Spacer()
+                
+                // 次の単語へ
+                Button(action: { nextWord() }) {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(currentIndex >= practiceWords.count - 1 ? ModernDesignSystem.Colors.textSecondary : ModernDesignSystem.Colors.accent)
+                        .frame(width: 44, height: 44)
+                        .background(Color.white)
+                        .cornerRadius(ModernDesignSystem.CornerRadius.sm)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
+                                .stroke(ModernDesignSystem.Colors.border, lineWidth: 1)
+                        )
+                }
+                .disabled(currentIndex >= practiceWords.count - 1)
+            }
+            
+            // 順番変更オプション（コンパクト）
+            HStack(spacing: ModernDesignSystem.Spacing.xs) {
+                ForEach(OrderMode.allCases, id: \.self) { mode in
+                    Button(action: { changeOrderMode(mode) }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: iconForOrderMode(mode))
+                                .font(.system(size: 12, weight: .medium))
+                            Text(mode.rawValue)
+                                .font(ModernDesignSystem.Typography.caption)
+                        }
+                        .foregroundColor(practiceOrderMode == mode ? .white : ModernDesignSystem.Colors.text)
+                        .padding(.horizontal, ModernDesignSystem.Spacing.sm)
+                        .padding(.vertical, ModernDesignSystem.Spacing.xs)
+                        .background(practiceOrderMode == mode ? ModernDesignSystem.Colors.accent : Color.white)
+                        .cornerRadius(ModernDesignSystem.CornerRadius.sm)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
+                                .stroke(practiceOrderMode == mode ? Color.clear : ModernDesignSystem.Colors.border, lineWidth: 1)
+                        )
+                    }
+                }
+                
+                Spacer()
+                
+                // シャッフルボタン
+                Button(action: { shufflePracticeWords() }) {
+                    Image(systemName: "shuffle")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(ModernDesignSystem.Colors.accent)
+                        .frame(width: 32, height: 32)
+                        .background(Color.white)
+                        .cornerRadius(ModernDesignSystem.CornerRadius.sm)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
+                                .stroke(ModernDesignSystem.Colors.border, lineWidth: 1)
+                        )
+                }
+            }
+        }
+        .padding(ModernDesignSystem.Spacing.md)
+        .background(Color.white)
+        .cornerRadius(ModernDesignSystem.CornerRadius.md)
+        .shadow(
+            color: ModernDesignSystem.Shadow.subtle.color,
+            radius: ModernDesignSystem.Shadow.subtle.radius,
+            x: ModernDesignSystem.Shadow.subtle.x,
+            y: ModernDesignSystem.Shadow.subtle.y
+        )
+    }
+    
     private func loadPracticeWords() {
         switch practiceMode {
         case .words:
@@ -517,10 +711,64 @@ struct SpeechPracticeView: View {
             practiceWords = wordData.words.filter { !wordData.isStudied(word: $0) }
         }
         
+        // 順序モードに従って並び替え
+        applyCurrentOrderMode()
+        
         currentIndex = 0
         currentWord = practiceWords.first
         score = 0
         totalAttempts = 0
+    }
+    
+    // MARK: - Order Management Methods
+    private func applyCurrentOrderMode() {
+        switch practiceOrderMode {
+        case .number:
+            practiceWords.sort { Int($0.number) ?? 0 < Int($1.number) ?? 0 }
+        case .random:
+            practiceWords.shuffle()
+        case .difficulty:
+            // 未学習 → 学習済みの順、同じカテゴリ内では番号順
+            practiceWords.sort { word1, word2 in
+                let isStudied1 = wordData.isStudied(word: word1)
+                let isStudied2 = wordData.isStudied(word: word2)
+                
+                if isStudied1 != isStudied2 {
+                    return !isStudied1 && isStudied2 // 未学習を先に
+                }
+                
+                return (Int(word1.number) ?? 0) < (Int(word2.number) ?? 0)
+            }
+        }
+    }
+    
+    private func changeOrderMode(_ newMode: OrderMode) {
+        practiceOrderMode = newMode
+        applyCurrentOrderMode()
+        currentIndex = 0
+        currentWord = practiceWords.first
+    }
+    
+    private func shufflePracticeWords() {
+        practiceWords.shuffle()
+        currentIndex = 0
+        currentWord = practiceWords.first
+    }
+    
+    private func previousWord() {
+        guard currentIndex > 0 else { return }
+        currentIndex -= 1
+        currentWord = practiceWords[currentIndex]
+        speechManager.recognizedText = ""
+        showResult = false
+    }
+    
+    private func iconForOrderMode(_ mode: OrderMode) -> String {
+        switch mode {
+        case .number: return "123.rectangle"
+        case .random: return "dice"
+        case .difficulty: return "chart.line.uptrend.xyaxis"
+        }
     }
 }
 

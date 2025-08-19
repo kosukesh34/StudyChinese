@@ -73,11 +73,6 @@ struct MemorizationView: View {
     // MARK: - Header Section
     private var headerSection: some View {
         HStack {
-            Text("暗記カード")
-                .font(ModernDesignSystem.Typography.largeTitle)
-                .fontWeight(.bold)
-                .foregroundColor(ModernDesignSystem.Colors.text)
-            
             Spacer()
             
             Button(action: {

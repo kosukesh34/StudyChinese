@@ -292,6 +292,7 @@
 				DEVELOPMENT_TEAM = T29T2L39T5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StudyChinese/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "中国語勉強アプリ";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -319,6 +320,7 @@
 				DEVELOPMENT_TEAM = T29T2L39T5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StudyChinese/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "中国語勉強アプリ";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
