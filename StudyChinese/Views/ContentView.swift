@@ -34,24 +34,24 @@ struct ContentView: View {
                     )
                 }
                 
-                QuizView(wordData: wordData)
+                StudyPracticeView(wordData: wordData)
                     .environment(\.themeColors, ThemeColors.colors(for: themeManager.currentTheme))
                     .tag(1)
                     .tabItem {
                         LuxuryTabItem(
-                            icon: "questionmark.diamond",
-                            title: "クイズ",
+                            icon: "graduationcap",
+                            title: "学習練習",
                             isSelected: selectedTab == 1
                         )
                     }
                 
-                MemorizationView(wordData: wordData)
+                LongTextView()
                     .environment(\.themeColors, ThemeColors.colors(for: themeManager.currentTheme))
                     .tag(2)
                     .tabItem {
                         LuxuryTabItem(
-                            icon: "brain.head.profile",
-                            title: "暗記",
+                            icon: "doc.text.magnifyingglass",
+                            title: "長文学習",
                             isSelected: selectedTab == 2
                         )
                     }

@@ -37,6 +37,16 @@ class AudioPlayerManager: NSObject, ObservableObject, AVAudioPlayerDelegate {
         playAudioFile(path: path)
     }
     
+    // 長文音声ファイルを再生
+    func playLongTextAudio(fileName: String) {
+        guard let path = Bundle.main.path(forResource: fileName.replacingOccurrences(of: ".mp3", with: ""), ofType: "mp3") else {
+            print("長文音声ファイルが見つかりません: \(fileName)")
+            return
+        }
+        
+        playAudioFile(path: path)
+    }
+    
     // 共通の音声再生処理
     private func playAudioFile(path: String) {
         do {

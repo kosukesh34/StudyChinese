@@ -46,10 +46,20 @@ class SpeechRecognitionManager: ObservableObject {
             }
         }
         
-        AVAudioSession.sharedInstance().requestRecordPermission { [weak self] allowed in
-            DispatchQueue.main.async {
-                if !allowed {
-                    self?.authorizationError = "マイクの使用許可が必要です"
+        if #available(iOS 17.0, *) {
+            AVAudioApplication.requestRecordPermission { [weak self] allowed in
+                DispatchQueue.main.async {
+                    if !allowed {
+                        self?.authorizationError = "マイクの使用許可が必要です"
+                    }
+                }
+            }
+        } else {
+            AVAudioSession.sharedInstance().requestRecordPermission { [weak self] allowed in
+                DispatchQueue.main.async {
+                    if !allowed {
+                        self?.authorizationError = "マイクの使用許可が必要です"
+                    }
                 }
             }
         }
