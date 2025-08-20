@@ -228,6 +228,7 @@ extension Color {
 struct LuxuryCard<Content: View>: View {
     let content: Content
     let elevation: CardElevation
+    @Environment(\.themeColors) var themeColors
     
     enum CardElevation {
         case low, medium, high, premium
@@ -255,20 +256,20 @@ struct LuxuryCard<Content: View>: View {
         Group {
             switch elevation {
             case .low:
-                Color.white
+                themeColors.cardBackground
             case .medium:
-                ModernDesignSystem.Gradients.subtleElevation
+                themeColors.cardBackground
             case .high:
-                Color.white
+                themeColors.cardBackground
                     .overlay(
                         RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.lg)
-                            .stroke(ModernDesignSystem.Colors.borderAccent, lineWidth: 1)
+                            .stroke(themeColors.accent, lineWidth: 1)
                     )
             case .premium:
-                ModernDesignSystem.Gradients.subtleElevation
+                themeColors.cardBackground
                     .overlay(
                         RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.lg)
-                            .stroke(ModernDesignSystem.Gradients.primaryGold, lineWidth: 2)
+                            .stroke(themeColors.accent, lineWidth: 2)
                     )
             }
         }

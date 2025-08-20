@@ -164,6 +164,18 @@ class SpeechRecognitionManager: ObservableObject {
         }
     }
     
+    // 新しい練習セッション開始時に状態をリセット
+    func resetSession() {
+        cleanupResources()
+        
+        DispatchQueue.main.async {
+            self.recognizedText = ""
+            self.confidence = 0.0
+            self.isRecording = false
+            self.isProcessing = false
+        }
+    }
+    
     private func cleanupResources() {
         // タイマーを停止
         recordingTimer?.invalidate()
@@ -234,46 +246,191 @@ class SpeechRecognitionManager: ObservableObject {
         return matrix[s1Count][s2Count]
     }
     
+    // 単語レベルでの発音分析
+    private func analyzeWordLevel(original: String, recognized: String) -> [WordLevelResult] {
+        let originalWords = segmentChineseText(original)
+        let recognizedWords = segmentChineseText(recognized)
+        
+        var results: [WordLevelResult] = []
+        let maxCount = max(originalWords.count, recognizedWords.count)
+        
+        for i in 0..<maxCount {
+            let targetWord = i < originalWords.count ? originalWords[i] : ""
+            let spokenWord = i < recognizedWords.count ? recognizedWords[i] : ""
+            
+            if !targetWord.isEmpty {
+                let wordSimilarity = calculateSimilarity(original: targetWord, recognized: spokenWord)
+                let isCorrect = wordSimilarity >= 0.8 // 80%以上で正解とする
+                
+                let feedback: String
+                if isCorrect {
+                    feedback = "正確"
+                } else if wordSimilarity >= 0.6 {
+                    feedback = "もう少し"
+                } else if spokenWord.isEmpty {
+                    feedback = "未認識"
+                } else {
+                    feedback = "要練習"
+                }
+                
+                results.append(WordLevelResult(
+                    word: spokenWord,
+                    targetWord: targetWord,
+                    similarity: wordSimilarity,
+                    confidence: confidence,
+                    isCorrect: isCorrect,
+                    feedback: feedback
+                ))
+            }
+        }
+        
+        return results
+    }
+    
+    // 中国語テキストを単語に分割（改良版）
+    private func segmentChineseText(_ text: String) -> [String] {
+        // スペース区切りがある場合はそれを使用
+        if text.contains(" ") {
+            return text.components(separatedBy: " ").filter { !$0.isEmpty }
+        }
+        
+        // 句読点を除去
+        let cleanedText = text.replacingOccurrences(of: "[。，、？！：；]", with: "", options: .regularExpression)
+        
+        // より智能な中国語分詞（簡易版）
+        return segmentChineseTextIntelligently(cleanedText)
+    }
+    
+    // 智能分詞（基本的なルールベース）
+    private func segmentChineseTextIntelligently(_ text: String) -> [String] {
+        var segments: [String] = []
+        var currentSegment = ""
+        var i = text.startIndex
+        
+        while i < text.endIndex {
+            let char = String(text[i])
+            
+            // 2文字の一般的な組み合わせをチェック
+            if i < text.index(before: text.endIndex) {
+                let nextChar = String(text[text.index(after: i)])
+                let twoCharWord = char + nextChar
+                
+                if isCommonTwoCharWord(twoCharWord) {
+                    if !currentSegment.isEmpty {
+                        segments.append(currentSegment)
+                        currentSegment = ""
+                    }
+                    segments.append(twoCharWord)
+                    i = text.index(i, offsetBy: 2)
+                    continue
+                }
+            }
+            
+            // 単一文字の処理
+            if isStandaloneChar(char) {
+                if !currentSegment.isEmpty {
+                    segments.append(currentSegment)
+                    currentSegment = ""
+                }
+                segments.append(char)
+            } else {
+                currentSegment += char
+            }
+            
+            i = text.index(after: i)
+        }
+        
+        if !currentSegment.isEmpty {
+            segments.append(currentSegment)
+        }
+        
+        return segments.filter { !$0.isEmpty }
+    }
+    
+    // 一般的な2文字単語かどうかをチェック
+    private func isCommonTwoCharWord(_ word: String) -> Bool {
+        let commonTwoCharWords = [
+            "中国", "学习", "学習", "练习", "練習", "朋友", "老师", "老師", "学生", "学生",
+            "今天", "明天", "昨天", "现在", "現在", "时间", "時間", "工作", "公司",
+            "家里", "学校", "学校", "医院", "醫院", "银行", "銀行", "商店", "饭店",
+            "喜欢", "喜歡", "知道", "认为", "認為", "觉得", "覺得", "希望", "想要",
+            "什么", "什麼", "怎么", "怎麼", "为什么", "為什麼", "哪里", "哪裡"
+        ]
+        return commonTwoCharWords.contains(word)
+    }
+    
+    // 独立した文字かどうかをチェック
+    private func isStandaloneChar(_ char: String) -> Bool {
+        let standaloneChars = [
+            "我", "你", "他", "她", "它", "们", "們", "的", "了", "在", "是", "有", "不", "很", "也", "都",
+            "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "百", "千", "万", "萬"
+        ]
+        return standaloneChars.contains(char)
+    }
+    
     // 改善された発音評価
     func evaluatePronunciation(original: String, recognized: String) -> PronunciationResult {
         let similarity = calculateSimilarity(original: original, recognized: recognized)
         let confidenceScore = Double(confidence)
         
-        // 類似度と信頼度を組み合わせたスコア
-        let combinedScore = (similarity * 0.7) + (confidenceScore * 0.3)
+        // 単語レベルの分析を実行
+        let wordLevelResults = analyzeWordLevel(original: original, recognized: recognized)
+        
+        // より詳細な評価基準
+        // 1. 音声認識の信頼度 (40%)
+        // 2. テキストの類似度 (60%)
+        let combinedScore = (similarity * 0.6) + (confidenceScore * 0.4)
+        
+        // より詳細なフィードバック
+        let similarityPercent = Int(similarity * 100)
+        let confidencePercent = Int(confidenceScore * 100)
         
         if combinedScore >= 0.9 {
             return PronunciationResult(
                 score: combinedScore,
                 grade: .excellent,
-                feedback: "素晴らしい発音です！完璧です。"
+                feedback: "素晴らしい発音です！\n📊 類似度: \(similarityPercent)% | 信頼度: \(confidencePercent)%",
+                wordLevelResults: wordLevelResults
             )
         } else if combinedScore >= 0.75 {
             return PronunciationResult(
                 score: combinedScore,
                 grade: .good,
-                feedback: "とても良い発音です。もう少しで完璧です。"
+                feedback: "とても良い発音です！\n📊 類似度: \(similarityPercent)% | 信頼度: \(confidencePercent)%",
+                wordLevelResults: wordLevelResults
             )
         } else if combinedScore >= 0.5 {
             return PronunciationResult(
                 score: combinedScore,
                 grade: .fair,
-                feedback: "良い努力です。発音をもう少し練習してみましょう。"
+                feedback: "もう少し練習しましょう。\n📊 類似度: \(similarityPercent)% | 信頼度: \(confidencePercent)%\n💡 目標: 類似度80%以上、信頼度70%以上",
+                wordLevelResults: wordLevelResults
             )
         } else {
             return PronunciationResult(
                 score: combinedScore,
                 grade: .needsImprovement,
-                feedback: "もう一度お手本を聞いて、ゆっくり練習してみましょう。"
+                feedback: "発音の練習を続けましょう。\n📊 類似度: \(similarityPercent)% | 信頼度: \(confidencePercent)%\n💡 ゆっくりはっきりと話してみてください",
+                wordLevelResults: wordLevelResults
             )
         }
     }
+}
+
+struct WordLevelResult {
+    let word: String
+    let targetWord: String
+    let similarity: Double
+    let confidence: Float
+    let isCorrect: Bool
+    let feedback: String
 }
 
 struct PronunciationResult {
     let score: Double
     let grade: PronunciationGrade
     let feedback: String
+    let wordLevelResults: [WordLevelResult]
 }
 
 enum PronunciationGrade {
@@ -297,6 +454,19 @@ enum PronunciationGrade {
         case .good: return "blue"
         case .fair: return "orange"
         case .needsImprovement: return "red"
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .excellent:
+            return "完璧な発音"
+        case .good:
+            return "良い発音"
+        case .fair:
+            return "練習が必要"
+        case .needsImprovement:
+            return "改善が必要"
         }
     }
 }

@@ -3,6 +3,7 @@ import SwiftUI
 struct NotificationSettingsView: View {
     @StateObject private var notificationManager = NotificationManager()
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.themeColors) var themeColors
     
     var body: some View {
         NavigationView {
@@ -32,7 +33,7 @@ struct NotificationSettingsView: View {
                     Button("完了") {
                         dismiss()
                     }
-                    .foregroundColor(ModernDesignSystem.Colors.accent)
+                    .foregroundColor(themeColors.accent)
                 }
             }
         }
@@ -42,17 +43,17 @@ struct NotificationSettingsView: View {
         VStack(spacing: ModernDesignSystem.Spacing.md) {
             Image(systemName: "bell.badge")
                 .font(.system(size: 48, weight: .light))
-                .foregroundColor(ModernDesignSystem.Colors.accent)
+                .foregroundColor(themeColors.accent)
             
             VStack(spacing: ModernDesignSystem.Spacing.xs) {
                 Text("学習リマインダー")
                     .font(ModernDesignSystem.Typography.headlineMedium)
                     .fontWeight(.semibold)
-                    .foregroundColor(ModernDesignSystem.Colors.text)
+                    .foregroundColor(themeColors.text)
                 
                 Text("毎日決まった時間に学習を促す通知を受け取ることができます")
                     .font(ModernDesignSystem.Typography.bodyMedium)
-                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    .foregroundColor(themeColors.textSecondary)
                     .multilineTextAlignment(.center)
             }
         }
@@ -65,11 +66,11 @@ struct NotificationSettingsView: View {
                 VStack(alignment: .leading, spacing: ModernDesignSystem.Spacing.xs) {
                     Text("毎日のリマインダー")
                         .font(ModernDesignSystem.Typography.titleMedium)
-                        .foregroundColor(ModernDesignSystem.Colors.text)
+                        .foregroundColor(themeColors.text)
                     
                     Text("学習習慣を身につけましょう")
                         .font(ModernDesignSystem.Typography.bodySmall)
-                        .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                        .foregroundColor(themeColors.textSecondary)
                 }
                 
                 Spacer()
@@ -78,7 +79,7 @@ struct NotificationSettingsView: View {
                     get: { notificationManager.isNotificationEnabled },
                     set: { _ in notificationManager.toggleNotification() }
                 ))
-                .toggleStyle(SwitchToggleStyle(tint: ModernDesignSystem.Colors.accent))
+                .toggleStyle(SwitchToggleStyle(tint: themeColors.accent))
             }
             
             if !notificationManager.isAuthorized && notificationManager.isNotificationEnabled {
@@ -98,7 +99,7 @@ struct NotificationSettingsView: View {
             }
         }
         .padding(ModernDesignSystem.Spacing.md)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.subtle.color,
@@ -114,11 +115,11 @@ struct NotificationSettingsView: View {
                 VStack(alignment: .leading, spacing: ModernDesignSystem.Spacing.xs) {
                     Text("通知時間")
                         .font(ModernDesignSystem.Typography.titleMedium)
-                        .foregroundColor(ModernDesignSystem.Colors.text)
+                        .foregroundColor(themeColors.text)
                     
                     Text("毎日この時間に通知が届きます")
                         .font(ModernDesignSystem.Typography.bodySmall)
-                        .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                        .foregroundColor(themeColors.textSecondary)
                 }
                 
                 Spacer()
@@ -137,7 +138,7 @@ struct NotificationSettingsView: View {
             .frame(maxHeight: 120)
         }
         .padding(ModernDesignSystem.Spacing.md)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.subtle.color,

@@ -10,6 +10,7 @@ import SwiftUI
 struct QuizView: View {
     @ObservedObject var wordData: ChineseWordData
     @StateObject private var studyDataManager = StudyDataManager.shared
+    @Environment(\.themeColors) var themeColors
     @State private var currentQuizWord: ChineseWord?
     @State private var options: [String] = []
     @State private var correctAnswer: String = ""
@@ -39,7 +40,7 @@ struct QuizView: View {
             headerSection
                 .padding(.horizontal, ModernDesignSystem.Spacing.md)
                 .padding(.vertical, ModernDesignSystem.Spacing.md)
-                .background(Color.white)
+                .background(themeColors.cardBackground)
             
             Divider()
             
@@ -88,7 +89,7 @@ struct QuizView: View {
                 }
             }
         }
-        .background(ModernDesignSystem.Colors.background)
+        .background(themeColors.background)
         .onChange(of: currentQuizWord) { _, newWord in
             // 問題表示時に音声を自動再生（クイズタイプによって音声の種類を決定）
             if let word = newWord {
@@ -119,7 +120,7 @@ struct QuizView: View {
                 }
             }
             .pickerStyle(MenuPickerStyle())
-            .accentColor(ModernDesignSystem.Colors.accent)
+            .accentColor(themeColors.accent)
             .onChange(of: quizType) { _, _ in
                 resetQuiz()
             }
@@ -132,10 +133,10 @@ struct QuizView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("スコア")
                     .font(ModernDesignSystem.Typography.caption)
-                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    .foregroundColor(themeColors.textSecondary)
                 Text("\(score)/\(totalQuestions)")
                     .font(ModernDesignSystem.Typography.headline)
-                    .foregroundColor(ModernDesignSystem.Colors.success)
+                    .foregroundColor(themeColors.success)
             }
             
             Spacer()
@@ -143,14 +144,14 @@ struct QuizView: View {
             VStack(alignment: .trailing, spacing: 4) {
                 Text("正答率")
                     .font(ModernDesignSystem.Typography.caption)
-                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    .foregroundColor(themeColors.textSecondary)
                 Text("\(totalQuestions > 0 ? Int((Double(score) / Double(totalQuestions)) * 100) : 0)%")
                     .font(ModernDesignSystem.Typography.headline)
-                    .foregroundColor(ModernDesignSystem.Colors.text)
+                    .foregroundColor(themeColors.text)
             }
         }
         .padding(ModernDesignSystem.Spacing.md)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.subtle.color,
@@ -167,14 +168,14 @@ struct QuizView: View {
                 Text(getQuestionText(for: word))
                     .font(ModernDesignSystem.Typography.title2)
                     .fontWeight(.semibold)
-                    .foregroundColor(ModernDesignSystem.Colors.text)
+                    .foregroundColor(themeColors.text)
                     .multilineTextAlignment(.center)
                 
                 // 拼音（発音）を表示（wordToMeaningとexampleToMeaningの場合のみ）
                 if !word.pronunciation.isEmpty && (quizType == .wordToMeaning || quizType == .exampleToMeaning) {
                     Text("[\(word.pronunciation)]")
                         .font(ModernDesignSystem.Typography.body)
-                        .foregroundColor(ModernDesignSystem.Colors.accent)
+                        .foregroundColor(themeColors.accent)
                         .fontWeight(.medium)
                 }
             }
@@ -200,12 +201,12 @@ struct QuizView: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, ModernDesignSystem.Spacing.sm)
-                .background(ModernDesignSystem.Colors.accent)
+                .background(themeColors.accent)
                 .cornerRadius(ModernDesignSystem.CornerRadius.sm)
             }
         }
         .padding(ModernDesignSystem.Spacing.lg)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.subtle.color,
@@ -239,7 +240,7 @@ struct QuizView: View {
                     HStack {
                         Text("正解: \(correctAnswer)")
                             .font(ModernDesignSystem.Typography.body)
-                            .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                            .foregroundColor(themeColors.textSecondary)
                         Spacer()
                     }
                 }
@@ -254,10 +255,10 @@ struct QuizView: View {
                             Text("拼音:")
                                 .font(ModernDesignSystem.Typography.body)
                                 .fontWeight(.bold)
-                                .foregroundColor(ModernDesignSystem.Colors.text)
+                                .foregroundColor(themeColors.text)
                             Text("[\(word.pronunciation)]")
                                 .font(ModernDesignSystem.Typography.body)
-                                .foregroundColor(ModernDesignSystem.Colors.accent)
+                                .foregroundColor(themeColors.accent)
                             Spacer()
                         }
                     }
@@ -269,27 +270,27 @@ struct QuizView: View {
                                 Text("例文:")
                                     .font(ModernDesignSystem.Typography.body)
                                     .fontWeight(.bold)
-                                    .foregroundColor(ModernDesignSystem.Colors.text)
+                                    .foregroundColor(themeColors.text)
                                 Spacer()
                             }
                             
                             Text(word.example)
                                 .font(ModernDesignSystem.Typography.body)
-                                .foregroundColor(ModernDesignSystem.Colors.text)
+                                .foregroundColor(themeColors.text)
                                 .multilineTextAlignment(.leading)
                             
                             // 例文の拼音表示
                             if !word.examplePronunciation.isEmpty {
                                 Text("[\(word.examplePronunciation)]")
                                     .font(ModernDesignSystem.Typography.caption)
-                                    .foregroundColor(ModernDesignSystem.Colors.accent)
+                                    .foregroundColor(themeColors.accent)
                                     .multilineTextAlignment(.leading)
                             }
                             
                             if !word.exampleMeaning.isEmpty {
                                 Text(word.exampleMeaning)
                                     .font(ModernDesignSystem.Typography.caption)
-                                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                                    .foregroundColor(themeColors.textSecondary)
                                     .multilineTextAlignment(.leading)
                             }
                         }
@@ -309,14 +310,14 @@ struct QuizView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, ModernDesignSystem.Spacing.sm)
-                            .background(ModernDesignSystem.Colors.accent)
+                            .background(themeColors.accent)
                             .cornerRadius(ModernDesignSystem.CornerRadius.sm)
                         }
                     }
                 }
             }
             .padding(ModernDesignSystem.Spacing.md)
-            .background(isCorrect ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
+            .background(isCorrect ? themeColors.success.opacity(0.1) : themeColors.error.opacity(0.1))
             .cornerRadius(ModernDesignSystem.CornerRadius.md)
         )
     }
@@ -360,16 +361,16 @@ struct QuizView: View {
         VStack(spacing: ModernDesignSystem.Spacing.lg) {
             Image(systemName: "questionmark.circle")
                 .font(.system(size: 48))
-                .foregroundColor(ModernDesignSystem.Colors.accent)
+                .foregroundColor(themeColors.accent)
             
             Text("クイズを始めましょう")
                 .font(ModernDesignSystem.Typography.title2)
                 .fontWeight(.bold)
-                .foregroundColor(ModernDesignSystem.Colors.text)
+                .foregroundColor(themeColors.text)
             
             Text("上部でクイズタイプを選択して、クイズを開始してください")
                 .font(ModernDesignSystem.Typography.body)
-                .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                .foregroundColor(themeColors.textSecondary)
                 .multilineTextAlignment(.center)
             
             SimpleButton(
@@ -381,7 +382,7 @@ struct QuizView: View {
             }
         }
         .padding(ModernDesignSystem.Spacing.lg)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.subtle.color,
@@ -394,7 +395,7 @@ struct QuizView: View {
     // MARK: - Helper Methods
     private func getOptionTextColor(_ option: String) -> Color {
         if selectedAnswer.isEmpty {
-            return ModernDesignSystem.Colors.text
+            return themeColors.text
         }
         
         if option == correctAnswer {
@@ -402,13 +403,13 @@ struct QuizView: View {
         } else if option == selectedAnswer && option != correctAnswer {
             return .white
         } else {
-            return ModernDesignSystem.Colors.text
+            return themeColors.text
         }
     }
     
     private func getOptionBackgroundColor(_ option: String) -> Color {
         if selectedAnswer.isEmpty {
-            return Color.white
+            return themeColors.cardBackground
         }
         
         if option == correctAnswer {
@@ -416,13 +417,13 @@ struct QuizView: View {
         } else if option == selectedAnswer && option != correctAnswer {
             return .red
         } else {
-            return Color.white
+            return themeColors.cardBackground
         }
     }
     
     private func getOptionBorderColor(_ option: String) -> Color {
         if selectedAnswer.isEmpty {
-            return ModernDesignSystem.Colors.border
+            return themeColors.border
         }
         
         if option == correctAnswer {
@@ -430,7 +431,7 @@ struct QuizView: View {
         } else if option == selectedAnswer && option != correctAnswer {
             return .red
         } else {
-            return ModernDesignSystem.Colors.border
+            return themeColors.border
         }
     }
     

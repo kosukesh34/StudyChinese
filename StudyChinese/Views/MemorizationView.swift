@@ -10,6 +10,7 @@ import SwiftUI
 struct MemorizationView: View {
     @ObservedObject var wordData: ChineseWordData
     @StateObject private var studyDataManager = StudyDataManager.shared
+    @Environment(\.themeColors) var themeColors
     @State private var currentCardIndex: Int = 0
     @State private var showAnswer: Bool = false
     @State private var cards: [ChineseWord] = []
@@ -35,7 +36,7 @@ struct MemorizationView: View {
             headerSection
                 .padding(.horizontal, ModernDesignSystem.Spacing.md)
                 .padding(.vertical, ModernDesignSystem.Spacing.md)
-                .background(Color.white)
+                .background(themeColors.cardBackground)
             
             Divider()
             
@@ -62,7 +63,7 @@ struct MemorizationView: View {
             
             Spacer()
         }
-        .background(ModernDesignSystem.Colors.background)
+        .background(themeColors.background)
         .onAppear {
             loadCards()
         }
@@ -85,12 +86,12 @@ struct MemorizationView: View {
                     Image(systemName: "chevron.down")
                         .font(.system(size: 12))
                 }
-                .foregroundColor(ModernDesignSystem.Colors.accent)
+                .foregroundColor(themeColors.accent)
                 .padding(.horizontal, ModernDesignSystem.Spacing.sm)
                 .padding(.vertical, 6)
                 .overlay(
                     RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
-                        .stroke(ModernDesignSystem.Colors.border, lineWidth: 1)
+                        .stroke(themeColors.border, lineWidth: 1)
                 )
             }
         }
@@ -102,10 +103,10 @@ struct MemorizationView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("進捗")
                     .font(ModernDesignSystem.Typography.caption)
-                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    .foregroundColor(themeColors.textSecondary)
                 Text("\(currentCardIndex + 1) / \(cards.count)")
                     .font(ModernDesignSystem.Typography.headline)
-                    .foregroundColor(ModernDesignSystem.Colors.text)
+                    .foregroundColor(themeColors.text)
             }
             
             Spacer()
@@ -113,14 +114,14 @@ struct MemorizationView: View {
             VStack(alignment: .trailing, spacing: 4) {
                 Text("暗記済み")
                     .font(ModernDesignSystem.Typography.caption)
-                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    .foregroundColor(themeColors.textSecondary)
                 Text("\(memorizedCount)")
                     .font(ModernDesignSystem.Typography.headline)
-                    .foregroundColor(ModernDesignSystem.Colors.success)
+                    .foregroundColor(themeColors.success)
             }
         }
         .padding(ModernDesignSystem.Spacing.md)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.subtle.color,
@@ -208,15 +209,15 @@ struct MemorizationView: View {
         VStack(spacing: ModernDesignSystem.Spacing.lg) {
             Image(systemName: "square.stack.3d.up")
                 .font(.system(size: 48))
-                .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                .foregroundColor(themeColors.textSecondary)
             
             Text("学習するカードがありません")
                 .font(ModernDesignSystem.Typography.title2)
-                .foregroundColor(ModernDesignSystem.Colors.text)
+                .foregroundColor(themeColors.text)
             
             Text("他の学習モードを選択してください")
                 .font(ModernDesignSystem.Typography.body)
-                .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                .foregroundColor(themeColors.textSecondary)
                 .multilineTextAlignment(.center)
             
             SimpleButton(
@@ -228,7 +229,7 @@ struct MemorizationView: View {
             }
         }
         .padding(ModernDesignSystem.Spacing.lg)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.subtle.color,
@@ -249,11 +250,11 @@ struct MemorizationView: View {
                 }) {
                     HStack {
                         Text(mode.description)
-                            .foregroundColor(ModernDesignSystem.Colors.text)
+                            .foregroundColor(themeColors.text)
                         Spacer()
                         if studyMode == mode {
                             Image(systemName: "checkmark")
-                                .foregroundColor(ModernDesignSystem.Colors.accent)
+                                .foregroundColor(themeColors.accent)
                         }
                     }
                 }
@@ -326,6 +327,7 @@ struct SimpleFlashCard: View {
     let word: ChineseWord
     let showAnswer: Bool
     @ObservedObject var audioPlayer: AudioPlayerManager
+    @Environment(\.themeColors) var themeColors
     
     var body: some View {
         VStack(spacing: ModernDesignSystem.Spacing.lg) {
@@ -334,16 +336,16 @@ struct SimpleFlashCard: View {
                 VStack(spacing: ModernDesignSystem.Spacing.md) {
                     Text("この中国語の意味は？")
                         .font(ModernDesignSystem.Typography.headline)
-                        .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                        .foregroundColor(themeColors.textSecondary)
                     
                     Text(word.word)
                         .font(.system(size: 36, weight: .bold))
-                        .foregroundColor(ModernDesignSystem.Colors.text)
+                        .foregroundColor(themeColors.text)
                         .multilineTextAlignment(.center)
                     
                     Text(word.pronunciation)
                         .font(ModernDesignSystem.Typography.title2)
-                        .foregroundColor(ModernDesignSystem.Colors.accent)
+                        .foregroundColor(themeColors.accent)
                         .multilineTextAlignment(.center)
                     
                     Button(action: {
@@ -355,12 +357,12 @@ struct SimpleFlashCard: View {
                             Text("音声を聞く")
                         }
                         .font(ModernDesignSystem.Typography.body)
-                        .foregroundColor(ModernDesignSystem.Colors.accent)
+                        .foregroundColor(themeColors.accent)
                         .padding(.horizontal, ModernDesignSystem.Spacing.md)
                         .padding(.vertical, ModernDesignSystem.Spacing.sm)
                         .overlay(
                             RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
-                                .stroke(ModernDesignSystem.Colors.accent, lineWidth: 1)
+                                .stroke(themeColors.accent, lineWidth: 1)
                         )
                     }
                 }
@@ -369,11 +371,11 @@ struct SimpleFlashCard: View {
                 VStack(spacing: ModernDesignSystem.Spacing.md) {
                     Text("答え")
                         .font(ModernDesignSystem.Typography.headline)
-                        .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                        .foregroundColor(themeColors.textSecondary)
                     
                     Text(word.meaning)
                         .font(.system(size: 28, weight: .bold))
-                        .foregroundColor(ModernDesignSystem.Colors.text)
+                        .foregroundColor(themeColors.text)
                         .multilineTextAlignment(.center)
                     
                     if !word.example.isEmpty {
@@ -383,15 +385,15 @@ struct SimpleFlashCard: View {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("例文")
                                 .font(ModernDesignSystem.Typography.headline)
-                                .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                                .foregroundColor(themeColors.textSecondary)
                             
                             Text(word.example)
                                 .font(ModernDesignSystem.Typography.body)
-                                .foregroundColor(ModernDesignSystem.Colors.text)
+                                .foregroundColor(themeColors.text)
                             
                             Text(word.exampleMeaning)
                                 .font(ModernDesignSystem.Typography.body)
-                                .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                                .foregroundColor(themeColors.textSecondary)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
@@ -400,7 +402,7 @@ struct SimpleFlashCard: View {
         }
         .padding(ModernDesignSystem.Spacing.lg)
         .frame(maxWidth: .infinity, minHeight: 250)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.medium.color,

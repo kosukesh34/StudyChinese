@@ -9,18 +9,20 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var wordData = ChineseWordData()
+    @StateObject private var themeManager = ThemeManager()
     @State private var selectedTab = 0
 
     var body: some View {
         ZStack {
-            // プレミアム背景
-            ModernDesignSystem.Gradients.subtleElevation
+            // テーマ対応背景
+            ThemeColors.colors(for: themeManager.currentTheme).background
                 .ignoresSafeArea()
             
             TabView(selection: $selectedTab) {
                 NavigationView {
                     WordListView(wordData: wordData)
                         .navigationBarHidden(true)
+                        .environment(\.themeColors, ThemeColors.colors(for: themeManager.currentTheme))
                 }
                 .navigationViewStyle(StackNavigationViewStyle())
                 .tag(0)
@@ -33,6 +35,7 @@ struct ContentView: View {
                 }
                 
                 QuizView(wordData: wordData)
+                    .environment(\.themeColors, ThemeColors.colors(for: themeManager.currentTheme))
                     .tag(1)
                     .tabItem {
                         LuxuryTabItem(
@@ -43,6 +46,7 @@ struct ContentView: View {
                     }
                 
                 MemorizationView(wordData: wordData)
+                    .environment(\.themeColors, ThemeColors.colors(for: themeManager.currentTheme))
                     .tag(2)
                     .tabItem {
                         LuxuryTabItem(
@@ -53,6 +57,7 @@ struct ContentView: View {
                     }
                 
                 SpeechPracticeView(wordData: wordData)
+                    .environment(\.themeColors, ThemeColors.colors(for: themeManager.currentTheme))
                     .tag(3)
                     .tabItem {
                         LuxuryTabItem(
@@ -63,6 +68,8 @@ struct ContentView: View {
                     }
                 
                 StudyProgressView(wordData: wordData)
+                    .environment(\.themeColors, ThemeColors.colors(for: themeManager.currentTheme))
+                    .environmentObject(themeManager)
                     .tag(4)
                     .tabItem {
                         LuxuryTabItem(
@@ -73,8 +80,8 @@ struct ContentView: View {
                     }
             }
         }
-        .accentColor(ModernDesignSystem.Colors.accent)
-        .preferredColorScheme(.light)
+        .accentColor(ThemeColors.colors(for: themeManager.currentTheme).accent)
+        .preferredColorScheme(themeManager.currentTheme == .dark ? .dark : .light)
         .onAppear {
             setupWidgetData()
         }
@@ -93,19 +100,20 @@ struct LuxuryTabItem: View {
     let icon: String
     let title: String
     let isSelected: Bool
+    @Environment(\.themeColors) var themeColors
     
     var body: some View {
         VStack(spacing: ModernDesignSystem.Spacing.xs) {
             Image(systemName: icon)
                 .font(.system(size: 20, weight: isSelected ? .semibold : .medium))
-                .foregroundColor(isSelected ? ModernDesignSystem.Colors.accent : ModernDesignSystem.Colors.textSecondary)
+                .foregroundColor(isSelected ? themeColors.accent : themeColors.textSecondary)
                 .scaleEffect(isSelected ? 1.1 : 1.0)
                 .animation(.easeInOut(duration: 0.2), value: isSelected)
             
             Text(title)
                 .font(ModernDesignSystem.Typography.labelSmall)
                 .fontWeight(isSelected ? .semibold : .medium)
-                .foregroundColor(isSelected ? ModernDesignSystem.Colors.accent : ModernDesignSystem.Colors.textSecondary)
+                .foregroundColor(isSelected ? themeColors.accent : themeColors.textSecondary)
         }
     }
 }

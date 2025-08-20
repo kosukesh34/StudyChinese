@@ -12,6 +12,7 @@ struct SpeechPracticeView: View {
     @StateObject private var speechManager = SpeechRecognitionManager()
     @StateObject private var audioPlayer = AudioPlayerManager()
     @StateObject private var studyDataManager = StudyDataManager.shared
+    @Environment(\.themeColors) var themeColors
     
     @State private var currentWord: ChineseWord?
     @State private var practiceWords: [ChineseWord] = []
@@ -64,12 +65,12 @@ struct SpeechPracticeView: View {
                                 Image(systemName: "chevron.down")
                                     .font(.system(size: 12))
                             }
-                            .foregroundColor(ModernDesignSystem.Colors.accent)
+                            .foregroundColor(themeColors.accent)
                             .padding(.horizontal, ModernDesignSystem.Spacing.sm)
                             .padding(.vertical, 6)
                             .overlay(
                                 RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
-                                    .stroke(ModernDesignSystem.Colors.border, lineWidth: 1)
+                                    .stroke(themeColors.border, lineWidth: 1)
                             )
                         }
                     }
@@ -130,24 +131,22 @@ struct SpeechPracticeView: View {
                 .padding(.bottom, ModernDesignSystem.Spacing.xxxl) // タブバーのための余白
             }
         }
-        .background(ModernDesignSystem.Colors.background)
+        .background(themeColors.background)
         .onAppear {
             loadPracticeWords()
         }
         .sheet(isPresented: $showingModeSelection) {
             modeSelectionSheet
         }
-        .alert("結果", isPresented: $showResult) {
-            Button("次へ") {
-                nextWord()
-            }
-            Button("もう一度") {
-                showResult = false
-                speechManager.recognizedText = ""
-            }
-        } message: {
+        .sheet(isPresented: $showResult) {
             if let result = pronunciationResult {
-                Text("\(result.grade.emoji) \(result.feedback)\n\nスコア: \(Int(result.score * 100))%")
+                DetailedResultView(result: result) {
+                    showResult = false
+                    pronunciationResult = nil
+                    speechManager.resetSession()
+                } nextAction: {
+                    nextWord()
+                }
             }
         }
     }
@@ -158,7 +157,7 @@ struct SpeechPracticeView: View {
             Text("音声練習")
                 .font(ModernDesignSystem.Typography.largeTitle)
                 .fontWeight(.bold)
-                .foregroundColor(ModernDesignSystem.Colors.text)
+                .foregroundColor(themeColors.text)
             
             Spacer()
             
@@ -171,12 +170,12 @@ struct SpeechPracticeView: View {
                     Image(systemName: "chevron.down")
                         .font(.system(size: 12))
                 }
-                .foregroundColor(ModernDesignSystem.Colors.accent)
+                .foregroundColor(themeColors.accent)
                 .padding(.horizontal, ModernDesignSystem.Spacing.sm)
                 .padding(.vertical, 6)
                 .overlay(
                     RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
-                        .stroke(ModernDesignSystem.Colors.border, lineWidth: 1)
+                        .stroke(themeColors.border, lineWidth: 1)
                 )
             }
         }
@@ -188,10 +187,10 @@ struct SpeechPracticeView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("スコア")
                     .font(ModernDesignSystem.Typography.caption)
-                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    .foregroundColor(themeColors.textSecondary)
                 Text("\(score)/\(totalAttempts)")
                     .font(ModernDesignSystem.Typography.headline)
-                    .foregroundColor(ModernDesignSystem.Colors.success)
+                    .foregroundColor(themeColors.success)
             }
             
             Spacer()
@@ -199,14 +198,14 @@ struct SpeechPracticeView: View {
             VStack(alignment: .trailing, spacing: 4) {
                 Text("進捗")
                     .font(ModernDesignSystem.Typography.caption)
-                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    .foregroundColor(themeColors.textSecondary)
                 Text("\(currentIndex + 1)/\(practiceWords.count)")
                     .font(ModernDesignSystem.Typography.headline)
-                    .foregroundColor(ModernDesignSystem.Colors.text)
+                    .foregroundColor(themeColors.text)
             }
         }
         .padding(ModernDesignSystem.Spacing.md)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.subtle.color,
@@ -222,17 +221,17 @@ struct SpeechPracticeView: View {
             VStack(spacing: ModernDesignSystem.Spacing.md) {
                 Text(practiceMode == .sentences ? "この例文を発音してください" : "この単語を発音してください")
                     .font(ModernDesignSystem.Typography.headline)
-                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    .foregroundColor(themeColors.textSecondary)
                 
                 Text(practiceMode == .sentences ? word.example : word.word)
                     .font(.system(size: 28, weight: .bold))
-                    .foregroundColor(ModernDesignSystem.Colors.text)
+                    .foregroundColor(themeColors.text)
                     .multilineTextAlignment(.center)
                 
                 if practiceMode != .sentences {
                     Text(word.pronunciation)
                         .font(ModernDesignSystem.Typography.title2)
-                        .foregroundColor(ModernDesignSystem.Colors.accent)
+                        .foregroundColor(themeColors.accent)
                 }
             }
             
@@ -247,12 +246,12 @@ struct SpeechPracticeView: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, ModernDesignSystem.Spacing.sm)
-                .background(ModernDesignSystem.Colors.accent)
+                .background(themeColors.accent)
                 .cornerRadius(ModernDesignSystem.CornerRadius.sm)
             }
         }
         .padding(ModernDesignSystem.Spacing.lg)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.subtle.color,
@@ -271,7 +270,7 @@ struct SpeechPracticeView: View {
                 VStack(spacing: 8) {
                     ZStack {
                         Circle()
-                            .fill(speechManager.isRecording ? Color.red : ModernDesignSystem.Colors.accent)
+                            .fill(speechManager.isRecording ? Color.red : themeColors.accent)
                             .frame(width: 60, height: 60)
                         
                         Image(systemName: speechManager.isRecording ? "stop.fill" : "mic.fill")
@@ -281,19 +280,29 @@ struct SpeechPracticeView: View {
                     
                     Text(speechManager.isRecording ? "タップで録音終了" : "録音開始")
                         .font(ModernDesignSystem.Typography.body)
-                        .foregroundColor(speechManager.isRecording ? .red : ModernDesignSystem.Colors.text)
+                        .foregroundColor(speechManager.isRecording ? .red : themeColors.text)
                 }
             }
             
             if speechManager.confidence > 0 {
                 VStack(spacing: 4) {
-                    Text("認識信頼度: \(Int(speechManager.confidence * 100))%")
-                        .font(ModernDesignSystem.Typography.caption)
-                        .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    HStack {
+                        Text("音声認識信頼度: \(Int(speechManager.confidence * 100))%")
+                            .font(ModernDesignSystem.Typography.caption)
+                            .foregroundColor(themeColors.textSecondary)
+                        
+                        Spacer()
+                        
+                        // 信頼度のレベル表示
+                        Text(confidenceLevel)
+                            .font(ModernDesignSystem.Typography.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(confidenceColor)
+                    }
                     
                     ProgressView(value: speechManager.confidence, total: 1.0)
                         .progressViewStyle(LinearProgressViewStyle(tint: confidenceColor))
-                        .frame(height: 4)
+                        .frame(height: 6)
                 }
             }
             
@@ -320,10 +329,10 @@ struct SpeechPracticeView: View {
             // 認識結果のヘッダー
             HStack {
                 Image(systemName: "waveform")
-                    .foregroundColor(ModernDesignSystem.Colors.accent)
+                    .foregroundColor(themeColors.accent)
                 Text("あなたの音声:")
                     .font(ModernDesignSystem.Typography.headline)
-                    .foregroundColor(ModernDesignSystem.Colors.text)
+                    .foregroundColor(themeColors.text)
                 Spacer()
             }
             
@@ -331,18 +340,18 @@ struct SpeechPracticeView: View {
             VStack(spacing: ModernDesignSystem.Spacing.sm) {
                 Text("認識された文字")
                     .font(ModernDesignSystem.Typography.caption)
-                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    .foregroundColor(themeColors.textSecondary)
                 
                 ZStack {
                     // 背景
                     RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.md)
                         .fill(speechManager.isRecording ? 
-                              ModernDesignSystem.Colors.surface.opacity(0.8) : 
-                              ModernDesignSystem.Colors.surface)
+                              themeColors.surface.opacity(0.8) : 
+                              themeColors.surface)
                         .overlay(
                             RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.md)
                                 .stroke(speechManager.isRecording ? 
-                                        ModernDesignSystem.Colors.accent : 
+                                        themeColors.accent : 
                                         Color.clear, lineWidth: 2)
                         )
                     
@@ -354,7 +363,7 @@ struct SpeechPracticeView: View {
                                 HStack(spacing: 4) {
                                     ForEach(0..<3, id: \.self) { index in
                                         Circle()
-                                            .fill(ModernDesignSystem.Colors.accent)
+                                            .fill(themeColors.accent)
                                             .frame(width: 8, height: 8)
                                             .scaleEffect(speechManager.isRecording ? 1.0 : 0.5)
                                             .animation(
@@ -367,20 +376,20 @@ struct SpeechPracticeView: View {
                                 }
                                 Text("音声を認識中...")
                                     .font(ModernDesignSystem.Typography.body)
-                                    .foregroundColor(ModernDesignSystem.Colors.accent)
+                                    .foregroundColor(themeColors.accent)
                             } else {
                                 Image(systemName: "mic.slash")
-                                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                                    .foregroundColor(themeColors.textSecondary)
                                 Text("音声を録音してください...")
                                     .font(ModernDesignSystem.Typography.body)
-                                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                                    .foregroundColor(themeColors.textSecondary)
                             }
                         }
                     } else {
                         Text(speechManager.recognizedText)
                             .font(ModernDesignSystem.Typography.title2)
                             .fontWeight(.semibold)
-                            .foregroundColor(ModernDesignSystem.Colors.text)
+                            .foregroundColor(themeColors.text)
                             .multilineTextAlignment(.center)
                             .scaleEffect(speechManager.isRecording ? 1.05 : 1.0)
                             .animation(.easeInOut(duration: 0.3), value: speechManager.recognizedText)
@@ -397,20 +406,20 @@ struct SpeechPracticeView: View {
                 VStack(spacing: ModernDesignSystem.Spacing.sm) {
                     Text("目標:")
                         .font(ModernDesignSystem.Typography.caption)
-                        .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                        .foregroundColor(themeColors.textSecondary)
                     
                     Text(targetText)
                         .font(ModernDesignSystem.Typography.title3)
                         .fontWeight(.medium)
-                        .foregroundColor(ModernDesignSystem.Colors.accent)
+                        .foregroundColor(themeColors.accent)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity)
                         .padding(ModernDesignSystem.Spacing.sm)
-                        .background(Color.white)
+                        .background(themeColors.cardBackground)
                         .cornerRadius(ModernDesignSystem.CornerRadius.sm)
                         .overlay(
                             RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
-                                .stroke(ModernDesignSystem.Colors.accent, lineWidth: 1)
+                                .stroke(themeColors.accent, lineWidth: 1)
                         )
                 }
             }
@@ -427,7 +436,7 @@ struct SpeechPracticeView: View {
             }
         }
         .padding(ModernDesignSystem.Spacing.md)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.medium.color,
@@ -441,19 +450,19 @@ struct SpeechPracticeView: View {
         VStack(spacing: ModernDesignSystem.Spacing.lg) {
             Image(systemName: "waveform.badge.plus")
                 .font(.system(size: 48))
-                .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                .foregroundColor(themeColors.textSecondary)
             
             Text("練習する単語がありません")
                 .font(ModernDesignSystem.Typography.title2)
-                .foregroundColor(ModernDesignSystem.Colors.text)
+                .foregroundColor(themeColors.text)
             
             Text("別の練習モードを選択してください")
                 .font(ModernDesignSystem.Typography.body)
-                .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                .foregroundColor(themeColors.textSecondary)
                 .multilineTextAlignment(.center)
         }
         .padding(ModernDesignSystem.Spacing.lg)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.subtle.color,
@@ -468,7 +477,7 @@ struct SpeechPracticeView: View {
             ProgressView()
             Text("読み込み中...")
                 .font(ModernDesignSystem.Typography.body)
-                .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                .foregroundColor(themeColors.textSecondary)
         }
     }
     
@@ -480,7 +489,7 @@ struct SpeechPracticeView: View {
             
             Text("音声認識の許可が必要です")
                 .font(ModernDesignSystem.Typography.title2)
-                .foregroundColor(ModernDesignSystem.Colors.text)
+                .foregroundColor(themeColors.text)
             
             if let error = speechManager.authorizationError {
                 Text(error)
@@ -491,11 +500,11 @@ struct SpeechPracticeView: View {
             
             Text("設定アプリから音声認識とマイクのアクセスを許可してください")
                 .font(ModernDesignSystem.Typography.body)
-                .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                .foregroundColor(themeColors.textSecondary)
                 .multilineTextAlignment(.center)
         }
         .padding(ModernDesignSystem.Spacing.lg)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.subtle.color,
@@ -515,11 +524,11 @@ struct SpeechPracticeView: View {
                 }) {
                     HStack {
                         Text(mode.description)
-                            .foregroundColor(ModernDesignSystem.Colors.text)
+                            .foregroundColor(themeColors.text)
                         Spacer()
                         if practiceMode == mode {
                             Image(systemName: "checkmark")
-                                .foregroundColor(ModernDesignSystem.Colors.accent)
+                                .foregroundColor(themeColors.accent)
                         }
                     }
                 }
@@ -547,11 +556,24 @@ struct SpeechPracticeView: View {
         }
     }
     
+    private var confidenceLevel: String {
+        if speechManager.confidence >= 0.8 {
+            return "高精度"
+        } else if speechManager.confidence >= 0.5 {
+            return "中精度"
+        } else {
+            return "低精度"
+        }
+    }
+    
     // MARK: - Methods
     private func toggleRecording() {
         if speechManager.isRecording {
             speechManager.stopRecording()
         } else {
+            // 新しい録音開始時に前の結果をクリア
+            showResult = false
+            pronunciationResult = nil
             speechManager.startRecording()
         }
     }
@@ -598,8 +620,10 @@ struct SpeechPracticeView: View {
             currentWord = practiceWords.first
         }
         
-        speechManager.recognizedText = ""
+        // 音声認識を完全にリセット
+        speechManager.resetSession()
         showResult = false
+        pronunciationResult = nil
     }
     
     // MARK: - Word Order Control Section
@@ -611,13 +635,13 @@ struct SpeechPracticeView: View {
                 Button(action: { previousWord() }) {
                     Image(systemName: "chevron.left")
                         .font(.system(size: 18, weight: .medium))
-                        .foregroundColor(currentIndex <= 0 ? ModernDesignSystem.Colors.textSecondary : ModernDesignSystem.Colors.accent)
+                        .foregroundColor(currentIndex <= 0 ? themeColors.textSecondary : themeColors.accent)
                         .frame(width: 44, height: 44)
-                        .background(Color.white)
+                        .background(themeColors.cardBackground)
                         .cornerRadius(ModernDesignSystem.CornerRadius.sm)
                         .overlay(
                             RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
-                                .stroke(ModernDesignSystem.Colors.border, lineWidth: 1)
+                                .stroke(themeColors.border, lineWidth: 1)
                         )
                 }
                 .disabled(currentIndex <= 0)
@@ -628,10 +652,10 @@ struct SpeechPracticeView: View {
                 VStack(spacing: 4) {
                     Text("\(currentIndex + 1) / \(practiceWords.count)")
                         .font(ModernDesignSystem.Typography.headline)
-                        .foregroundColor(ModernDesignSystem.Colors.text)
+                        .foregroundColor(themeColors.text)
                     
                     ProgressView(value: Double(currentIndex + 1), total: Double(practiceWords.count))
-                        .progressViewStyle(LinearProgressViewStyle(tint: ModernDesignSystem.Colors.accent))
+                        .progressViewStyle(LinearProgressViewStyle(tint: themeColors.accent))
                         .frame(height: 6)
                         .frame(width: 100)
                 }
@@ -642,13 +666,13 @@ struct SpeechPracticeView: View {
                 Button(action: { nextWord() }) {
                     Image(systemName: "chevron.right")
                         .font(.system(size: 18, weight: .medium))
-                        .foregroundColor(currentIndex >= practiceWords.count - 1 ? ModernDesignSystem.Colors.textSecondary : ModernDesignSystem.Colors.accent)
+                        .foregroundColor(currentIndex >= practiceWords.count - 1 ? themeColors.textSecondary : themeColors.accent)
                         .frame(width: 44, height: 44)
-                        .background(Color.white)
+                        .background(themeColors.cardBackground)
                         .cornerRadius(ModernDesignSystem.CornerRadius.sm)
                         .overlay(
                             RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
-                                .stroke(ModernDesignSystem.Colors.border, lineWidth: 1)
+                                .stroke(themeColors.border, lineWidth: 1)
                         )
                 }
                 .disabled(currentIndex >= practiceWords.count - 1)
@@ -664,14 +688,14 @@ struct SpeechPracticeView: View {
                             Text(mode.rawValue)
                                 .font(ModernDesignSystem.Typography.caption)
                         }
-                        .foregroundColor(practiceOrderMode == mode ? .white : ModernDesignSystem.Colors.text)
+                        .foregroundColor(practiceOrderMode == mode ? .white : themeColors.text)
                         .padding(.horizontal, ModernDesignSystem.Spacing.sm)
                         .padding(.vertical, ModernDesignSystem.Spacing.xs)
-                        .background(practiceOrderMode == mode ? ModernDesignSystem.Colors.accent : Color.white)
+                        .background(practiceOrderMode == mode ? themeColors.accent : themeColors.cardBackground)
                         .cornerRadius(ModernDesignSystem.CornerRadius.sm)
                         .overlay(
                             RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
-                                .stroke(practiceOrderMode == mode ? Color.clear : ModernDesignSystem.Colors.border, lineWidth: 1)
+                                .stroke(practiceOrderMode == mode ? Color.clear : themeColors.border, lineWidth: 1)
                         )
                     }
                 }
@@ -682,19 +706,19 @@ struct SpeechPracticeView: View {
                 Button(action: { shufflePracticeWords() }) {
                     Image(systemName: "shuffle")
                         .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(ModernDesignSystem.Colors.accent)
+                        .foregroundColor(themeColors.accent)
                         .frame(width: 32, height: 32)
-                        .background(Color.white)
+                        .background(themeColors.cardBackground)
                         .cornerRadius(ModernDesignSystem.CornerRadius.sm)
                         .overlay(
                             RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
-                                .stroke(ModernDesignSystem.Colors.border, lineWidth: 1)
+                                .stroke(themeColors.border, lineWidth: 1)
                         )
                 }
             }
         }
         .padding(ModernDesignSystem.Spacing.md)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.md)
         .shadow(
             color: ModernDesignSystem.Shadow.subtle.color,
@@ -764,8 +788,10 @@ struct SpeechPracticeView: View {
         guard currentIndex > 0 else { return }
         currentIndex -= 1
         currentWord = practiceWords[currentIndex]
-        speechManager.recognizedText = ""
+        // 音声認識を完全にリセット
+        speechManager.resetSession()
         showResult = false
+        pronunciationResult = nil
     }
     
     private func iconForOrderMode(_ mode: OrderMode) -> String {
@@ -773,6 +799,237 @@ struct SpeechPracticeView: View {
         case .number: return "123.rectangle"
         case .random: return "dice"
         case .difficulty: return "chart.line.uptrend.xyaxis"
+        }
+    }
+}
+
+// MARK: - Detailed Result View
+struct DetailedResultView: View {
+    let result: PronunciationResult
+    let retryAction: () -> Void
+    let nextAction: () -> Void
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.themeColors) var themeColors
+    
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: ModernDesignSystem.Spacing.lg) {
+                    // 全体スコア表示
+                    overallScoreSection
+                    
+                    // 単語レベル分析
+                    if !result.wordLevelResults.isEmpty {
+                        wordLevelAnalysisSection
+                    }
+                    
+                    // 詳細フィードバック
+                    feedbackSection
+                    
+                    // アクションボタン
+                    actionButtonsSection
+                }
+                .padding(ModernDesignSystem.Spacing.lg)
+            }
+            .background(themeColors.background)
+            .navigationTitle("発音評価結果")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(trailing: Button("完了") { dismiss() })
+        }
+    }
+    
+    private var overallScoreSection: some View {
+        VStack(spacing: ModernDesignSystem.Spacing.md) {
+            // スコア円グラフ
+            ZStack {
+                Circle()
+                    .stroke(themeColors.border.opacity(0.3), lineWidth: 8)
+                    .frame(width: 120, height: 120)
+                
+                Circle()
+                    .trim(from: 0, to: result.score)
+                    .stroke(scoreColor, style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                    .frame(width: 120, height: 120)
+                    .rotationEffect(.degrees(-90))
+                
+                VStack {
+                    Text("\(Int(result.score * 100))")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(themeColors.text)
+                    Text("点")
+                        .font(.caption)
+                        .foregroundColor(themeColors.textSecondary)
+                }
+            }
+            
+            Text("\(result.grade.emoji) \(result.grade.description)")
+                .font(ModernDesignSystem.Typography.titleMedium)
+                .foregroundColor(scoreColor)
+        }
+        .padding(ModernDesignSystem.Spacing.lg)
+        .background(themeColors.cardBackground)
+        .cornerRadius(ModernDesignSystem.CornerRadius.lg)
+    }
+    
+    private var wordLevelAnalysisSection: some View {
+        VStack(alignment: .leading, spacing: ModernDesignSystem.Spacing.md) {
+            HStack {
+                Text("単語別分析")
+                    .font(ModernDesignSystem.Typography.titleMedium)
+                    .fontWeight(.semibold)
+                    .foregroundColor(themeColors.text)
+                
+                Spacer()
+                
+                Text("ELSA Speak風")
+                    .font(ModernDesignSystem.Typography.caption)
+                    .foregroundColor(themeColors.accent)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(themeColors.accent.opacity(0.1))
+                    .cornerRadius(4)
+            }
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: min(result.wordLevelResults.count, 3)), spacing: ModernDesignSystem.Spacing.sm) {
+                ForEach(Array(result.wordLevelResults.enumerated()), id: \.offset) { index, wordResult in
+                    WordResultCard(wordResult: wordResult)
+                }
+            }
+        }
+        .padding(ModernDesignSystem.Spacing.md)
+        .background(themeColors.cardBackground)
+        .cornerRadius(ModernDesignSystem.CornerRadius.lg)
+    }
+    
+    private var feedbackSection: some View {
+        VStack(alignment: .leading, spacing: ModernDesignSystem.Spacing.sm) {
+            Text("詳細フィードバック")
+                .font(ModernDesignSystem.Typography.titleMedium)
+                .fontWeight(.semibold)
+                .foregroundColor(themeColors.text)
+            
+            Text(result.feedback)
+                .font(ModernDesignSystem.Typography.body)
+                .foregroundColor(themeColors.textSecondary)
+                .multilineTextAlignment(.leading)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(ModernDesignSystem.Spacing.md)
+        .background(themeColors.cardBackground)
+        .cornerRadius(ModernDesignSystem.CornerRadius.lg)
+    }
+    
+    private var actionButtonsSection: some View {
+        HStack(spacing: ModernDesignSystem.Spacing.md) {
+            Button(action: {
+                dismiss()
+                retryAction()
+            }) {
+                HStack {
+                    Image(systemName: "arrow.clockwise")
+                    Text("もう一度")
+                }
+                .font(ModernDesignSystem.Typography.bodyMedium)
+                .foregroundColor(themeColors.text)
+                .padding(.vertical, ModernDesignSystem.Spacing.sm)
+                .frame(maxWidth: .infinity)
+                .background(themeColors.cardBackground)
+                .cornerRadius(ModernDesignSystem.CornerRadius.sm)
+                .overlay(
+                    RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
+                        .stroke(themeColors.border, lineWidth: 1)
+                )
+            }
+            
+            Button(action: {
+                dismiss()
+                nextAction()
+            }) {
+                HStack {
+                    Text("次へ")
+                    Image(systemName: "arrow.right")
+                }
+                .font(ModernDesignSystem.Typography.bodyMedium)
+                .foregroundColor(.white)
+                .padding(.vertical, ModernDesignSystem.Spacing.sm)
+                .frame(maxWidth: .infinity)
+                .background(themeColors.accent)
+                .cornerRadius(ModernDesignSystem.CornerRadius.sm)
+            }
+        }
+    }
+    
+    private var scoreColor: Color {
+        switch result.grade {
+        case .excellent:
+            return .green
+        case .good:
+            return .blue
+        case .fair:
+            return .orange
+        case .needsImprovement:
+            return .red
+        }
+    }
+}
+
+// MARK: - Word Result Card
+struct WordResultCard: View {
+    let wordResult: WordLevelResult
+    @Environment(\.themeColors) var themeColors
+    
+    var body: some View {
+        VStack(spacing: 4) {
+            // 目標単語
+            Text(wordResult.targetWord)
+                .font(ModernDesignSystem.Typography.titleLarge)
+                .fontWeight(.semibold)
+                .foregroundColor(themeColors.text)
+            
+            // 認識された単語
+            if !wordResult.word.isEmpty {
+                Text(wordResult.word)
+                    .font(ModernDesignSystem.Typography.bodyMedium)
+                    .foregroundColor(wordColor)
+            }
+            
+            // 類似度バー
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    Rectangle()
+                        .fill(themeColors.border.opacity(0.3))
+                        .frame(height: 4)
+                    
+                    Rectangle()
+                        .fill(wordColor)
+                        .frame(width: geometry.size.width * CGFloat(wordResult.similarity), height: 4)
+                }
+            }
+            .frame(height: 4)
+            
+            // フィードバック
+            Text(wordResult.feedback)
+                .font(ModernDesignSystem.Typography.caption)
+                .foregroundColor(wordColor)
+                .fontWeight(.medium)
+        }
+        .padding(ModernDesignSystem.Spacing.sm)
+        .background(wordColor.opacity(0.1))
+        .cornerRadius(ModernDesignSystem.CornerRadius.sm)
+        .overlay(
+            RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.sm)
+                .stroke(wordColor.opacity(0.3), lineWidth: 1)
+        )
+    }
+    
+    private var wordColor: Color {
+        if wordResult.isCorrect {
+            return .green
+        } else if wordResult.similarity >= 0.6 {
+            return .orange
+        } else {
+            return .red
         }
     }
 }

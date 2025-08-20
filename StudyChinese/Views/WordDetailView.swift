@@ -13,6 +13,7 @@ struct WordDetailView: View {
     @ObservedObject var audioPlayer: AudioPlayerManager
     let onNext: () -> Void
     let onPrevious: () -> Void
+    @Environment(\.themeColors) var themeColors
     
     var body: some View {
         VStack(spacing: 20) {
@@ -22,7 +23,7 @@ struct WordDetailView: View {
                     Button(action: onPrevious) {
                         Image(systemName: "chevron.left")
                             .font(.title)
-                            .foregroundColor(.blue)
+                            .foregroundColor(themeColors.accent)
                     }
                     
                     Spacer()
@@ -30,7 +31,7 @@ struct WordDetailView: View {
                     Button(action: onNext) {
                         Image(systemName: "chevron.right")
                             .font(.title)
-                            .foregroundColor(.blue)
+                            .foregroundColor(themeColors.accent)
                     }
                 }
                 .padding(.horizontal)
@@ -46,13 +47,13 @@ struct WordDetailView: View {
                     Text(word.word)
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                        .foregroundColor(.primary)
+                        .foregroundColor(themeColors.text)
                     
                     // 発音（セグメントに応じて表示/非表示）
                     if segmentIndex == 0 {
                         Text(word.pronunciation)
                             .font(.title3)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(themeColors.textSecondary)
                     }
                     
                     // 意味（セグメントに応じて表示/非表示）
@@ -72,7 +73,7 @@ struct WordDetailView: View {
                     if segmentIndex == 0 {
                         Text(word.examplePronunciation)
                             .font(.body)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(themeColors.textSecondary)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
                     }
@@ -89,7 +90,7 @@ struct WordDetailView: View {
                     // 詳細
                     Text(word.detail.isEmpty ? "なし" : word.detail)
                         .font(.footnote)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(themeColors.textSecondary)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
                 }
@@ -107,7 +108,7 @@ struct WordDetailView: View {
                         VStack {
                             Image(systemName: "play.circle.fill")
                                 .font(.system(size: 50))
-                                .foregroundColor(.blue)
+                                .foregroundColor(themeColors.accent)
                             Text("単語音声")
                                 .font(.caption)
                         }
@@ -132,7 +133,7 @@ struct WordDetailView: View {
             } else {
                 Text("データが読み込まれていません")
                     .font(.title2)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(themeColors.textSecondary)
             }
         }
         .background(Color(UIColor.systemBackground))

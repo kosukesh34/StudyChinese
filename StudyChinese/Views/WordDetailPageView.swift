@@ -13,6 +13,7 @@ struct WordDetailPageView: View {
     @State private var selectedSegment = 0
     @State private var currentWordIndex: Int
     @StateObject private var audioPlayer = AudioPlayerManager()
+    @Environment(\.themeColors) var themeColors
     
     init(wordData: ChineseWordData, selectedWord: ChineseWord) {
         self.wordData = wordData

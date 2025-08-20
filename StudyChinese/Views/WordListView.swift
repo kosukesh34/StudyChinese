@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WordListView: View {
     @ObservedObject var wordData: ChineseWordData
+    @Environment(\.themeColors) var themeColors
     
     var body: some View {
         VStack(spacing: 0) {
@@ -25,7 +26,7 @@ struct WordListView: View {
                     
                     Text("\(wordData.filteredWords.count)個の単語")
                         .font(ModernDesignSystem.Typography.bodyMedium)
-                        .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                        .foregroundColor(themeColors.textSecondary)
                 }
                 
                 // プレミアム検索バー
@@ -34,7 +35,7 @@ struct WordListView: View {
             .padding(.horizontal, ModernDesignSystem.Spacing.md)
             .padding(.top, ModernDesignSystem.Spacing.md)
             .padding(.bottom, ModernDesignSystem.Spacing.sm)
-            .background(Color.white)
+            .background(themeColors.surface)
             
             Divider()
             
@@ -52,7 +53,7 @@ struct WordListView: View {
                 .padding(.vertical, ModernDesignSystem.Spacing.sm)
             }
         }
-        .background(ModernDesignSystem.Colors.background)
+        .background(themeColors.background)
         .onChange(of: wordData.searchText) { _, _ in
             wordData.updateFilteredWords()
         }
@@ -63,6 +64,7 @@ struct WordListView: View {
 struct LuxuryStatsView: View {
     let studiedCount: Int
     let favoriteCount: Int
+    @Environment(\.themeColors) var themeColors
     
     var body: some View {
         HStack(spacing: ModernDesignSystem.Spacing.md) {
@@ -70,14 +72,14 @@ struct LuxuryStatsView: View {
                 icon: "checkmark.circle.fill",
                 value: "\(studiedCount)",
                 label: "学習済み",
-                color: ModernDesignSystem.Colors.success
+                color: themeColors.success
             )
             
             StatBadge(
                 icon: "heart.fill",
                 value: "\(favoriteCount)",
                 label: "お気に入り",
-                color: ModernDesignSystem.Colors.accent
+                color: themeColors.accent
             )
         }
     }
@@ -89,6 +91,7 @@ struct StatBadge: View {
     let value: String
     let label: String
     let color: Color
+    @Environment(\.themeColors) var themeColors
     
     var body: some View {
         VStack(spacing: ModernDesignSystem.Spacing.xs) {
@@ -100,12 +103,12 @@ struct StatBadge: View {
                 Text(value)
                     .font(ModernDesignSystem.Typography.titleMedium)
                     .fontWeight(.semibold)
-                    .foregroundColor(ModernDesignSystem.Colors.textPrimary)
+                    .foregroundColor(themeColors.text)
             }
             
             Text(label)
                 .font(ModernDesignSystem.Typography.labelSmall)
-                .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                .foregroundColor(themeColors.textSecondary)
         }
         .padding(.vertical, ModernDesignSystem.Spacing.xs)
         .padding(.horizontal, ModernDesignSystem.Spacing.sm)
@@ -119,13 +122,14 @@ struct StatBadge: View {
 // MARK: - Luxury Search Bar
 struct LuxurySearchBar: View {
     @Binding var searchText: String
+    @Environment(\.themeColors) var themeColors
     
     var body: some View {
         HStack(spacing: ModernDesignSystem.Spacing.md) {
             HStack(spacing: ModernDesignSystem.Spacing.sm) {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    .foregroundColor(themeColors.textSecondary)
                 
                 TextField("単語を検索...", text: $searchText)
                     .font(ModernDesignSystem.Typography.bodyMedium)
@@ -135,7 +139,7 @@ struct LuxurySearchBar: View {
                     Button(action: { searchText = "" }) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                            .foregroundColor(themeColors.textSecondary)
                     }
                 }
             }
@@ -143,10 +147,10 @@ struct LuxurySearchBar: View {
             .padding(.vertical, ModernDesignSystem.Spacing.sm)
             .background(
                 RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.md)
-                    .fill(Color.white)
+                    .fill(themeColors.cardBackground)
                     .overlay(
                         RoundedRectangle(cornerRadius: ModernDesignSystem.CornerRadius.md)
-                            .stroke(ModernDesignSystem.Colors.border, lineWidth: 1)
+                            .stroke(themeColors.border, lineWidth: 1)
                     )
             )
         }
@@ -157,27 +161,28 @@ struct LuxurySearchBar: View {
 struct SimpleWordRow: View {
     let word: ChineseWord
     @ObservedObject var wordData: ChineseWordData
+    @Environment(\.themeColors) var themeColors
     
     var body: some View {
         HStack(spacing: ModernDesignSystem.Spacing.md) {
             // シンプルな番号表示
             Text(word.number)
                 .font(ModernDesignSystem.Typography.caption)
-                .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                .foregroundColor(themeColors.textSecondary)
                 .frame(width: 30, alignment: .leading)
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(word.word)
                     .font(ModernDesignSystem.Typography.headline)
-                    .foregroundColor(ModernDesignSystem.Colors.text)
+                    .foregroundColor(themeColors.text)
                 
                 Text(word.pronunciation)
                     .font(ModernDesignSystem.Typography.caption)
-                    .foregroundColor(ModernDesignSystem.Colors.accent)
+                    .foregroundColor(themeColors.accent)
                 
                 Text(word.meaning)
                     .font(ModernDesignSystem.Typography.body)
-                    .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                    .foregroundColor(themeColors.textSecondary)
                     .lineLimit(2)
             }
             
@@ -199,7 +204,7 @@ struct SimpleWordRow: View {
             }
         }
         .padding(.vertical, ModernDesignSystem.Spacing.sm)
-        .background(Color.white)
+        .background(themeColors.cardBackground)
         .cornerRadius(ModernDesignSystem.CornerRadius.sm)
         .shadow(
             color: ModernDesignSystem.Shadow.subtle.color,
@@ -214,6 +219,7 @@ struct SimpleWordRow: View {
 struct LuxuryWordRow: View {
     let word: ChineseWord
     @ObservedObject var wordData: ChineseWordData
+    @Environment(\.themeColors) var themeColors
     
     var body: some View {
         LuxuryCard(elevation: .low) {
@@ -227,7 +233,7 @@ struct LuxuryWordRow: View {
                     Text(word.number)
                         .font(ModernDesignSystem.Typography.labelMedium)
                         .fontWeight(.semibold)
-                        .foregroundColor(ModernDesignSystem.Colors.textPrimary)
+                        .foregroundColor(themeColors.text)
                 }
                 
                 VStack(alignment: .leading, spacing: ModernDesignSystem.Spacing.xs) {
@@ -235,23 +241,23 @@ struct LuxuryWordRow: View {
                     Text(word.word)
                         .font(ModernDesignSystem.Typography.titleLarge)
                         .fontWeight(.semibold)
-                        .foregroundColor(ModernDesignSystem.Colors.textPrimary)
+                        .foregroundColor(themeColors.text)
                     
                     // 発音（拼音）
                     HStack(spacing: ModernDesignSystem.Spacing.xs) {
                         Image(systemName: "speaker.wave.1")
                             .font(.system(size: 12, weight: .medium))
-                            .foregroundColor(ModernDesignSystem.Colors.accent)
+                            .foregroundColor(themeColors.accent)
                         
                         Text(word.pronunciation)
                             .font(ModernDesignSystem.Typography.bodySmall)
-                            .foregroundColor(ModernDesignSystem.Colors.accent)
+                            .foregroundColor(themeColors.accent)
                     }
                     
                     // 意味
                     Text(word.meaning)
                         .font(ModernDesignSystem.Typography.bodyMedium)
-                        .foregroundColor(ModernDesignSystem.Colors.textSecondary)
+                        .foregroundColor(themeColors.textSecondary)
                         .lineLimit(2)
                         .multilineTextAlignment(.leading)
                 }
@@ -263,7 +269,7 @@ struct LuxuryWordRow: View {
                     if wordData.isStudied(word: word) {
                         StatusBadge(
                             icon: "checkmark.circle.fill",
-                            color: ModernDesignSystem.Colors.success,
+                            color: themeColors.success,
                             type: .studied
                         )
                     }
@@ -271,7 +277,7 @@ struct LuxuryWordRow: View {
                     if wordData.isFavorite(word: word) {
                         StatusBadge(
                             icon: "heart.fill",
-                            color: ModernDesignSystem.Colors.accent,
+                            color: themeColors.accent,
                             type: .favorite
                         )
                     }
